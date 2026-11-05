@@ -45,13 +45,16 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);
 .book{background:var(--paper);border-radius:22px;box-shadow:0 20px 50px rgba(0,0,0,.35);overflow:hidden;position:relative;flex:1;min-height:0;display:flex;flex-direction:column}
 .book>*{flex:1;min-height:0}
 .quiz,.end{overflow:auto}
-.page{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.45fr);grid-template-rows:minmax(0,1fr) auto;gap:0}
-.page .txt{order:-1}
-.pic{position:relative;overflow:hidden;background:#3a2c22;min-height:0;border-right:6px solid var(--paper)}
+.page{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto;gap:0;overflow-y:auto;scroll-behavior:smooth}
+.page .pic{height:clamp(240px,58vh,640px)}
+.pic{position:relative;overflow:hidden;background:#3a2c22;min-height:0}
 .pic .bg{filter:blur(18px) brightness(.85);transform:scale(1.15)}
 .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .pic img.bg{object-fit:cover}
-.txt{padding:26px 30px;display:flex;flex-direction:column;justify-content:center;gap:0;min-width:0;min-height:0;overflow:auto;cursor:pointer}
+.txt{padding:16px 30px 6px;display:flex;flex-direction:column;justify-content:flex-start;gap:0;min-width:0;cursor:pointer}
+.txt .lines{margin-top:6px}
+.txt .lines p{max-width:1100px}
+.txt .chiprow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .prog{font-size:15px;font-weight:700;color:var(--muted);margin-top:10px;display:flex;gap:6px;align-items:center}
 .prog i{width:26px;height:6px;border-radius:3px;background:var(--line);display:inline-block}
 .prog i.on{background:var(--teal)}
@@ -159,8 +162,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);
   .page{grid-template-columns:1fr;grid-template-rows:auto}
   .pic{aspect-ratio:3/2;height:auto}
   .txt{overflow:visible}
-  .pic{border-right:0}
-  .page .txt{order:0}
+
   .q{grid-template-columns:1fr}
   .q .opts{grid-column:1;grid-row:auto}
   .pic{aspect-ratio:3/2;min-height:0;max-width:100%}
@@ -342,8 +344,9 @@ function render(){
   const fresh = !(book.dataset.page==String(idx));
   book.dataset.page = idx;
   book.innerHTML = `<div class="page"><div class="pic"><img class="bg" src="${p.img}?v=2" alt="" aria-hidden="true"><img class="${fresh?'kb':''}" src="${p.img}?v=2" alt="${p.title}">${fresh?fx+bub:bub.replace('class="bubble','class="bubble still')}<div class="num">${AR(pageNo)}</div></div>
-    <div class="txt" id="txt" title="اضغط لإكمال القراءة"><div class="chip">${p.title}</div>${prog}<div class="lines">${paras}</div></div>${q}</div>`;
+    <div class="txt" id="txt" title="اضغط لإكمال القراءة"><div class="chiprow"><div class="chip">${p.title}</div>${prog}</div><div class="lines">${paras}</div></div>${q}</div>`;
   document.getElementById('txt').addEventListener('click',e=>{ if(!e.target.closest('button')) advance(); });
+  if(!fresh){ const tgt = book.querySelector('.q') || book.querySelector('.lines p.cur'); if(tgt) setTimeout(()=>tgt.scrollIntoView({block:'nearest',behavior:'smooth'}),60); }
   if(p.q && st>=n){
     book.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{
       if(answered[idx]) return;
