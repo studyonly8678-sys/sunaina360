@@ -45,8 +45,9 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);
 .book{background:var(--paper);border-radius:22px;box-shadow:0 20px 50px rgba(0,0,0,.35);overflow:hidden;position:relative;flex:1;min-height:0;display:flex;flex-direction:column}
 .book>*{flex:1;min-height:0}
 .quiz,.end{overflow:auto}
-.page{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:0}
-.pic{position:relative;overflow:hidden;background:#3a2c22;min-height:0;border-left:6px solid var(--paper)}
+.page{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.45fr);grid-template-rows:minmax(0,1fr) auto;gap:0}
+.page .txt{order:-1}
+.pic{position:relative;overflow:hidden;background:#3a2c22;min-height:0;border-right:6px solid var(--paper)}
 .pic .bg{filter:blur(18px) brightness(.85);transform:scale(1.15)}
 .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .pic img.bg{object-fit:cover}
@@ -158,7 +159,8 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);
   .page{grid-template-columns:1fr;grid-template-rows:auto}
   .pic{aspect-ratio:3/2;height:auto}
   .txt{overflow:visible}
-  .pic{border-left:0}
+  .pic{border-right:0}
+  .page .txt{order:0}
   .q{grid-template-columns:1fr}
   .q .opts{grid-column:1;grid-row:auto}
   .pic{aspect-ratio:3/2;min-height:0;max-width:100%}
