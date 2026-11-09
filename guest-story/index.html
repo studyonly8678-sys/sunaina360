@@ -41,8 +41,8 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);
 .book>*{flex:1;min-height:0}
 .quiz,.end{overflow:auto}
 .page{display:flex;flex-direction:column;overflow:hidden;min-height:0;flex:1}
-.page .pic{flex:0 0 auto;height:clamp(200px,48vh,600px)}
-.page .scroll{flex:1;min-height:0;overflow-y:auto;scroll-behavior:smooth}
+.page .pic{flex:1 1 auto;height:auto;min-height:200px}
+.page .scroll{flex:0 0 auto;overflow:visible}
 .pic{position:relative;overflow:hidden;background:#3a2c22;min-height:0}
 .pic .bg{filter:blur(18px) brightness(.85);transform:scale(1.15)}
 .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
@@ -117,6 +117,19 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);
 .pic img.kb{animation:kb 1.6s ease-out both}
 @keyframes kb{from{opacity:0;transform:scale(1.06)}to{opacity:1;transform:scale(1)}}
 .reveal{animation:rise .7s ease both;animation-delay:var(--d,0s)}
+.lines p.one{margin:0;padding:8px 18px;min-height:calc(2 * 1.85em + 16px);display:flex;align-items:center;animation:lineIn .45s ease both}
+@keyframes lineIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.txt{padding:12px 30px 14px}
+.qmodal{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(20,16,36,.55);backdrop-filter:blur(3px);animation:qmIn .3s ease both}
+.qmodal.out{animation:qmOut .35s ease both}
+@keyframes qmIn{from{opacity:0}to{opacity:1}}
+@keyframes qmOut{to{opacity:0}}
+.q.qpop{margin:0;width:min(760px,100%);max-height:calc(100dvh - 32px);overflow:auto;background:#FFF7E3;border-style:solid;box-shadow:0 24px 60px rgba(0,0,0,.45);padding:22px 24px;grid-template-columns:1fr;animation:qpIn .45s cubic-bezier(.2,1.3,.4,1) both}
+.q.qpop h3,.q.qpop .stem,.q.qpop .opts,.q.qpop .fb{grid-column:1;grid-row:auto}
+.q.qpop h3{font-size:28px}.q.qpop .stem{font-size:23px}.q.qpop .opt{font-size:21px;min-height:56px}
+.qback{justify-self:center;background:none;border:0;color:#6B5E50;font-family:var(--body);font-size:17px;font-weight:700;cursor:pointer;padding:6px 10px;text-decoration:underline}
+@keyframes qpIn{from{opacity:0;transform:translateY(24px) scale(.94)}to{opacity:1;transform:none}}
+
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @keyframes shake{0%,100%{transform:none}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .fx{position:absolute;pointer-events:none;font-family:var(--display);color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.35),0 0 12px rgba(0,0,0,.35)}
@@ -173,7 +186,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);
   .book>*{flex:none}
   .book{overflow:visible}
   .page{overflow:visible;flex:none}
-  .page .pic{position:sticky;top:0;z-index:5;height:auto;aspect-ratio:3/2}
+  .page .pic{position:sticky;top:0;z-index:5;height:auto;aspect-ratio:3/2;flex:none}
   .page .scroll{overflow:visible}
   .txt{overflow:visible}
 
@@ -273,8 +286,11 @@ const STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.6 7
 /* ---------- state ---------- */
 let idx = 0, stars = 0, soundOn = true;
 let step = {};
-function advance(){ const p=PAGES[idx]; if(!p.text) return false; const n=p.text.length, st=step[idx]||1; if(st<n){ step[idx]=st+1; render(); return true; } return false; }
-function forward(){ if(nextBtn.disabled||nextBtn.hidden) return; if(idx===0) ctx(); if(advance()) return; go(idx+1); }
+function advance(){ const p=PAGES[idx]; if(!p.text) return false; const n=p.text.length, st=step[idx]||1; if(st<n){ step[idx]=st+1; render(); return true; } if(needQ()){ openQ(); return true; } return false; }
+let qOpen=-1;
+function needQ(){ const p=PAGES[idx]; return p.q && p.text && (step[idx]||1)>=p.text.length && !answered[idx]; }
+function openQ(){ qOpen=idx; render(); }
+function forward(){ if(nextBtn.disabled||nextBtn.hidden) return; if(idx===0) ctx(); if(advance()) return; if(needQ()){ openQ(); return; } go(idx+1); }
 const answered = {};
 const book = document.getElementById('book');
 const prevBtn = document.getElementById('prevBtn'), nextBtn = document.getElementById('nextBtn');
@@ -358,6 +374,7 @@ function render(){
   const p = PAGES[idx];
   [...dots.children].forEach((d,i)=>d.classList.toggle('on',i===idx));
   prevBtn.disabled = idx===0;
+  prevBtn.lastChild.textContent = (p.text && (step[idx]||1)>1) ? 'السطر السابق' : 'السابق';
   nextBtn.hidden = p.type==='end';
   if(p.type==='cover') return renderCover();
   if(p.type==='quiz') return renderQuiz();
@@ -366,27 +383,27 @@ function render(){
   const fx = (p.fx||[]).map(f=>`<span class="${f.cls}" style="right:${f.x};top:${f.y};font-size:${f.size}px;--d:${f.d}">${f.txt}</span>`).join('');
   const bub = p.bubble?`<div class="bubble${p.bubble.b?' up':''}" style="left:${p.bubble.x};${p.bubble.b?'bottom:'+p.bubble.b:'top:'+p.bubble.y};--d:${p.bubble.d}">${p.bubble.txt}</div>`:'';
   const st = step[idx] || 1; const n = p.text.length;
-  const paras = p.text.slice(0,st).map((t,i)=>`<p class="${i===st-1?'cur':'past'}">${t}</p>`).join('');
+  const paras = `<p class="cur one" key="${st}">${p.text[st-1]}</p>`;
   const prog = `<div class="prog" aria-label="السطر ${AR(st)} من ${AR(n)}">${p.text.map((_,i)=>`<i class="${i<st?'on':''}"></i>`).join('')}</div>`;
   let q='';
-  if(p.q && st>=n){
+  if(p.q && st>=n && qOpen===idx && !answered[idx]){
     const done = answered[idx];
-    q = `<div class="q reveal" style="--d:.2s"><h3>${STAR} أتوقّفُ وأستنتج</h3><div class="stem">${p.q.stem}</div>
+    q = `<div class="qmodal" role="dialog" aria-modal="true" aria-label="أتوقّف وأستنتج"><div class="q qpop"><h3>${STAR} أتوقّفُ وأستنتج</h3><div class="stem">${p.q.stem}</div>
       <div class="opts">${p.q.opts.map((o,i)=>`<button type="button" class="opt${done&&i===p.q.ans?' ok':''}" data-i="${i}">${o}</button>`).join('')}</div>
-      <div class="fb${done?' ok':''}" role="status">${done?'أحسنت! استنتاجٌ صحيح.':''}</div></div>`;
+      <div class="fb${done?' ok':''}" role="status">${done?'أحسنت! استنتاجٌ صحيح.':''}</div><button type="button" class="qback" id="qBack">↩ أرجع أقرأ الصفحة</button></div></div>`;
   }
   const fresh = !(book.dataset.page==String(idx));
   book.dataset.page = idx;
   book.innerHTML = `<div class="page"><div class="pic"><img class="bg" src="${p.img}?v=2" alt="" aria-hidden="true"><img class="${fresh?'kb':''}" src="${p.img}?v=2" alt="${p.title}">${fresh?fx+bub:bub.replace('class="bubble','class="bubble still')}<div class="num">${AR(pageNo)}</div><div class="stage">${(HS[idx]||[]).map((h,k)=>`<button class="hs${hsDone.has(idx+'-'+k)?' done':''}" data-k="${k}" style="left:${h.x}%;top:${h.y}%" aria-label="${h.t}"></button>`).join('')}</div>${(HS[idx]&&!hsHinted)?'<div class="hshint">👆 اضغط على الدوائر في الصورة</div>':''}</div>
-    <div class="scroll"><div class="txt" id="txt" title="اضغط لإكمال القراءة"><div class="chiprow"><div class="chip">${p.title}</div>${prog}</div><div class="lines">${paras}</div></div>${q}</div></div>`;
+    <div class="scroll"><div class="txt" id="txt" title="اضغط لإكمال القراءة"><div class="chiprow"><div class="chip">${p.title}</div>${prog}</div><div class="lines">${paras}</div></div></div></div>${q}`;
   document.getElementById('txt').addEventListener('click',e=>{ if(!e.target.closest('button')) advance(); });
   if(HS[idx]){ hsHinted=true; book.querySelectorAll('.hs').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); const h=HS[idx][+b.dataset.k]; play(h.s); b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop','done'); hsDone.add(idx+'-'+b.dataset.k); const st=b.parentNode; st.querySelectorAll('.hslab').forEach(x=>x.remove()); const l=document.createElement('div'); l.className='hslab'; l.style.left=h.x+'%'; l.style.top=h.y+'%'; l.innerHTML=h.t+'<span>'+h.e+'</span>'; st.appendChild(l); setTimeout(()=>l.remove(),1900); })); }
-  if(!fresh){ const tgt = book.querySelector('.q') || book.querySelector('.lines p.cur'); if(tgt) setTimeout(()=>tgt.scrollIntoView({block:'nearest',behavior:'smooth'}),60); }
-  if(p.q && st>=n){
+  if(book.querySelector('.qmodal')){ document.getElementById('qBack').addEventListener('click',()=>{qOpen=-1;render();}); setTimeout(()=>{const o=book.querySelector('.opt'); if(o) o.focus({preventScroll:true});},350); }
+  if(book.querySelector('.qmodal')){
     book.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{
       if(answered[idx]) return;
       const i=+b.dataset.i, fb=book.querySelector('.fb');
-      if(i===p.q.ans){ b.classList.add('ok'); fb.className='fb ok'; fb.textContent='أحسنت! استنتاجٌ صحيح.'; answered[idx]=true; stars++; setStars(); play('correct'); updateNext(); }
+      if(i===p.q.ans){ b.classList.add('ok'); fb.className='fb ok'; fb.textContent='أحسنت! استنتاجٌ صحيح.'; answered[idx]=true; stars++; setStars(); play('correct'); updateNext(); const m=book.querySelector('.qmodal'); setTimeout(()=>{ if(m){ m.classList.add('out'); setTimeout(()=>{ qOpen=-1; if(book.contains(m)) m.remove(); updateNext(); },350);} },1300); }
       else { b.classList.remove('no'); void b.offsetWidth; b.classList.add('no'); fb.className='fb no'; fb.textContent='فكّر مرّةً أخرى، وانظر إلى الصورة.'; play('wrong'); }
     }));
   }
@@ -396,9 +413,10 @@ function render(){
 function updateNext(){
   const p=PAGES[idx];
   const reading = p.text && (step[idx]||1) < p.text.length;
-  const locked = !reading && p.q && !answered[idx];
+  const locked = !reading && p.q && !answered[idx] && qOpen===idx;
+  const ask = !reading && p.q && !answered[idx] && qOpen!==idx;
   nextBtn.disabled = !!locked;
-  nextBtn.firstChild.textContent = reading ? 'أكمل القراءة ' : locked ? 'أجب أوّلًا ' : (p.type==='cover'?'ابدأ ':'الصفحة التالية ');
+  nextBtn.firstChild.textContent = reading ? 'أكمل القراءة ' : locked ? 'أجب أوّلًا ' : ask ? 'أتوقّف وأستنتج ' : (p.type==='cover'?'ابدأ ':'الصفحة التالية ');
 }
 function renderCover(){
   book.innerHTML = `<div class="cover"><img src="${PAGES[0].img}" alt="سلمان وجدّه عند باب البيت"><div class="veil"></div>
@@ -451,10 +469,11 @@ function renderEnd(){
   document.getElementById('againBtn').addEventListener('click',()=>{stars=0;step={};for(const k in answered) delete answered[k];setStars();go(0);});
   play('win');
 }
-function go(i){ const back=i<idx; idx=Math.max(0,Math.min(PAGES.length-1,i)); if(back&&PAGES[idx].text) step[idx]=PAGES[idx].text.length; if(idx>0) play('turn'); render(); window.scrollTo({top:0,behavior:'smooth'}); }
-prevBtn.addEventListener('click',()=>go(idx-1));
+function go(i){ qOpen=-1; const back=i<idx; idx=Math.max(0,Math.min(PAGES.length-1,i)); if(back&&PAGES[idx].text) step[idx]=PAGES[idx].text.length; if(idx>0) play('turn'); render(); window.scrollTo({top:0,behavior:'smooth'}); }
+function backward(){ const p=PAGES[idx]; if(p.text && (step[idx]||1)>1){ step[idx]=(step[idx]||1)-1; qOpen=-1; render(); return; } go(idx-1); }
+prevBtn.addEventListener('click',backward);
 nextBtn.addEventListener('click',forward);
-document.addEventListener('keydown',e=>{ if(e.target.matches('input')) return; if(e.key==='ArrowLeft'||e.key===' '){ e.preventDefault(); forward(); } if(e.key==='ArrowRight') go(idx-1); });
+document.addEventListener('keydown',e=>{ if(e.target.matches('input')) return; if(e.key==='ArrowLeft'||e.key===' '){ e.preventDefault(); forward(); } if(e.key==='ArrowRight') backward(); if(e.key==='Escape'&&qOpen===idx){ qOpen=-1; render(); } });
 document.getElementById('sndBtn').addEventListener('click',e=>{soundOn=!soundOn;const b=e.currentTarget;b.setAttribute('aria-pressed',soundOn);b.querySelector('span').textContent='الأصوات: '+(soundOn?'تعمل':'متوقّفة');});
 document.getElementById('fsBtn').addEventListener('click',()=>{const el=document.documentElement;try{ if(!document.fullscreenElement) el.requestFullscreen().catch(()=>flash('ملء الشاشة غير متاح هنا')); else document.exitFullscreen(); }catch(e){flash('ملء الشاشة غير متاح هنا');}});
 render();
