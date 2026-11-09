@@ -47,6 +47,22 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);
 .pic .bg{filter:blur(18px) brightness(.85);transform:scale(1.15)}
 .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .pic img.bg{object-fit:cover}
+.pic{container-type:size}
+.stage{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(100cqw,150cqh);height:min(100cqh,66.667cqw);z-index:3;pointer-events:none}
+.hs{position:absolute;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;border:3px solid rgba(255,255,255,.95);background:rgba(255,255,255,.18);box-shadow:0 0 0 0 rgba(255,214,90,.8),0 2px 8px rgba(0,0,0,.35);cursor:pointer;pointer-events:auto;padding:0;animation:hsPulse 2.2s ease-out infinite}
+.hs::after{content:"";position:absolute;inset:11px;border-radius:50%;background:#FFD65A;opacity:.9}
+.hs.done{animation:none;border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.08)}
+.hs.done::after{background:#7BD389;opacity:.85}
+.hs:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.hs.pop{animation:hsPop .45s ease-out}
+@keyframes hsPulse{0%{box-shadow:0 0 0 0 rgba(255,214,90,.75),0 2px 8px rgba(0,0,0,.35)}70%{box-shadow:0 0 0 16px rgba(255,214,90,0),0 2px 8px rgba(0,0,0,.35)}100%{box-shadow:0 0 0 0 rgba(255,214,90,0),0 2px 8px rgba(0,0,0,.35)}}
+@keyframes hsPop{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
+.hslab{position:absolute;transform:translate(-50%,-150%);background:#24203A;color:#fff;font-weight:700;font-size:18px;padding:5px 14px;border-radius:999px;white-space:nowrap;pointer-events:none;animation:hsLab 1.8s ease-out forwards;z-index:4}
+.hslab span{margin-inline-start:6px}
+@keyframes hsLab{0%{opacity:0;transform:translate(-50%,-110%)}15%{opacity:1;transform:translate(-50%,-150%)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-190%)}}
+.hshint{position:absolute;bottom:12px;left:12px;z-index:4;background:rgba(36,32,58,.88);color:#fff;font-weight:700;font-size:16px;padding:6px 14px;border-radius:999px;pointer-events:none;animation:hsHint 5s ease forwards}
+@keyframes hsHint{0%,85%{opacity:1}100%{opacity:0}}
+@media (max-width:820px){.hs{width:38px;height:38px;margin:-19px 0 0 -19px}.hs::after{inset:9px}.hslab{font-size:15px}}
 .txt{padding:16px 30px 6px;display:flex;flex-direction:column;justify-content:flex-start;gap:0;min-width:0;cursor:pointer}
 .txt .lines{margin-top:6px}
 .txt .lines p{max-width:1100px}
@@ -278,6 +294,16 @@ function tone(f,t,dur,type,vol,f2){const o=ac.createOscillator(),g=ac.createGain
 function noise(t,dur,type,freq,vol,q,freq2){const s=ac.createBufferSource();s.buffer=nb;const f=ac.createBiquadFilter();f.type=type;f.frequency.setValueAtTime(freq,t);if(freq2)f.frequency.linearRampToValueAtTime(freq2,t+dur);f.Q.value=q||1;const g=ac.createGain();env(g,t,.02,vol,dur);s.connect(f);f.connect(g);g.connect(master);s.start(t);s.stop(t+dur+.1);}
 const pluck=(f,t,v)=>{tone(f,t,.9,'triangle',v||.16);tone(f*2,t,.4,'sine',(v||.16)*.3);};
 const SFX={
+  hsBirds(){const n=ac.currentTime;for(let i=0;i<5;i++){const t=n+i*.22+Math.random()*.08;tone(2800+Math.random()*900,t,.07,'sine',.08,4200);tone(3700,t+.09,.06,'sine',.05,2900);}},
+  hsChime(){const n=ac.currentTime;[1568,2093,2637].forEach((f,i)=>tone(f,n+i*.12,.9,'sine',.07));},
+  hsPour(){const n=ac.currentTime;noise(n,1.1,'bandpass',1100,.18,2.5,2300);tone(2637,n+1.15,.4,'sine',.1);},
+  hsWater(){const n=ac.currentTime;noise(n,1.0,'bandpass',700,.2,3,1600);for(let i=0;i<5;i++)tone(500+Math.random()*500,n+.1+i*.17,.08,'sine',.06,900);},
+  hsClink(){const n=ac.currentTime;tone(2900,n,.45,'sine',.1);tone(4300,n+.01,.3,'sine',.05);tone(3100,n+.18,.4,'sine',.08);},
+  hsKnock(){const n=ac.currentTime;for(let i=0;i<3;i++){const t=n+i*.3;noise(t,.08,'lowpass',450,.9);tone(120,t,.14,'sine',.6,70);}},
+  hsBeads(){const n=ac.currentTime;for(let i=0;i<6;i++){const t=n+i*.11+Math.random()*.03;noise(t,.03,'bandpass',2600+Math.random()*900,.18,6);}},
+  hsWaves(){const n=ac.currentTime;noise(n,1.6,'lowpass',500,.22,1,1200);noise(n+.9,1.4,'lowpass',400,.16,1,1000);tone(1400,n+.4,.15,'sine',.04,1700);},
+  hsDates(){const n=ac.currentTime;tone(1900,n,.3,'sine',.08);noise(n,.05,'highpass',3000,.07);tone(2300,n+.25,.3,'sine',.06);},
+  hsWave(){const n=ac.currentTime;[784,988,1175].forEach((f,i)=>pluck(f,n+i*.15,.13));},
   birds(){const n=ac.currentTime;for(let i=0;i<9;i++){const t=n+.3+i*.42+Math.random()*.2;tone(2600+Math.random()*900,t,.07,'sine',.07,4200);tone(3600,t+.09,.06,'sine',.05,2500);}},
   prepare(){const n=ac.currentTime;for(let i=0;i<4;i++)noise(n+.3+i*.45,.3,'highpass',2500,.06);[587,659,698,784].forEach((f,i)=>pluck(f,n+2.1+i*.22,.1));},
   knock(){const n=ac.currentTime+.5;for(let i=0;i<3;i++){const t=n+i*.36;noise(t,.08,'lowpass',450,.9);tone(120,t,.14,'sine',.6,70);}},
@@ -295,6 +321,18 @@ const SFX={
   turn(){const n=ac.currentTime;noise(n,.3,'bandpass',500,.08,1,2600);},
   win(){const n=ac.currentTime;[523,659,784,1047,1319].forEach((f,i)=>tone(f,n+i*.12,.5,'triangle',.16));}
 };
+const HS={
+ 1:[{x:48,y:22,s:'hsBirds',t:'العصافير',e:'🐦'},{x:25,y:27,s:'hsChime',t:'الفانوس',e:'🏮'}],
+ 2:[{x:54,y:62,s:'hsPour',t:'دلّة القهوة',e:'☕'},{x:61,y:74,s:'hsDates',t:'التمر',e:'🌴'},{x:13,y:55,s:'hsBeads',t:'ترتيب المجلس',e:'🛋️'}],
+ 3:[{x:78,y:44,s:'hsKnock',t:'مطرقة الباب',e:'🚪'},{x:93,y:42,s:'hsKnock',t:'مطرقة الباب',e:'🚪'},{x:50,y:16,s:'hsChime',t:'الفانوس',e:'🏮'}],
+ 4:[{x:61,y:44,s:'door',t:'الباب',e:'🚪'},{x:62,y:72,s:'hsWave',t:'المصافحة',e:'🤝'},{x:77,y:80,s:'hsBeads',t:'المسباح',e:'📿'}],
+ 5:[{x:21,y:52,s:'hsPour',t:'دلّة القهوة',e:'☕'},{x:51,y:57,s:'hsClink',t:'الفنجان',e:'☕'},{x:49,y:87,s:'hsDates',t:'التمر',e:'🌴'},{x:75,y:76,s:'hsBeads',t:'المسباح',e:'📿'}],
+ 6:[{x:52,y:18,s:'hsWaves',t:'رحلة الغوص',e:'⛵'},{x:56,y:80,s:'hsPour',t:'دلّة القهوة',e:'☕'},{x:32,y:9,s:'hsChime',t:'الفانوس',e:'🏮'}],
+ 7:[{x:29,y:84,s:'hsWater',t:'إبريق الماء',e:'💧'},{x:45,y:50,s:'hsClink',t:'كأس الماء',e:'🥛'},{x:64,y:86,s:'plates',t:'الغداء',e:'🍽️'},{x:73,y:72,s:'hsDates',t:'صحن الضيف',e:'🍗'}],
+ 8:[{x:60,y:42,s:'door',t:'الباب',e:'🚪'},{x:47,y:55,s:'hsWave',t:'مع السلامة',e:'👋'},{x:86,y:72,s:'hsBeads',t:'المسباح',e:'📿'}],
+ 9:[{x:72,y:76,s:'hsPour',t:'القهوة',e:'☕'},{x:64,y:15,s:'hsChime',t:'الفانوس',e:'🏮'}]
+};
+let hsHinted=false; const hsDone=new Set();
 function play(name){ if(!soundOn||!SFX[name]) return; if(!ctx()) return; try{ SFX[name](); }catch(e){} }
 
 /* ---------- read aloud ---------- */
@@ -339,9 +377,10 @@ function render(){
   }
   const fresh = !(book.dataset.page==String(idx));
   book.dataset.page = idx;
-  book.innerHTML = `<div class="page"><div class="pic"><img class="bg" src="${p.img}?v=2" alt="" aria-hidden="true"><img class="${fresh?'kb':''}" src="${p.img}?v=2" alt="${p.title}">${fresh?fx+bub:bub.replace('class="bubble','class="bubble still')}<div class="num">${AR(pageNo)}</div></div>
+  book.innerHTML = `<div class="page"><div class="pic"><img class="bg" src="${p.img}?v=2" alt="" aria-hidden="true"><img class="${fresh?'kb':''}" src="${p.img}?v=2" alt="${p.title}">${fresh?fx+bub:bub.replace('class="bubble','class="bubble still')}<div class="num">${AR(pageNo)}</div><div class="stage">${(HS[idx]||[]).map((h,k)=>`<button class="hs${hsDone.has(idx+'-'+k)?' done':''}" data-k="${k}" style="left:${h.x}%;top:${h.y}%" aria-label="${h.t}"></button>`).join('')}</div>${(HS[idx]&&!hsHinted)?'<div class="hshint">👆 اضغط على الدوائر في الصورة</div>':''}</div>
     <div class="scroll"><div class="txt" id="txt" title="اضغط لإكمال القراءة"><div class="chiprow"><div class="chip">${p.title}</div>${prog}</div><div class="lines">${paras}</div></div>${q}</div></div>`;
   document.getElementById('txt').addEventListener('click',e=>{ if(!e.target.closest('button')) advance(); });
+  if(HS[idx]){ hsHinted=true; book.querySelectorAll('.hs').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); const h=HS[idx][+b.dataset.k]; play(h.s); b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop','done'); hsDone.add(idx+'-'+b.dataset.k); const st=b.parentNode; st.querySelectorAll('.hslab').forEach(x=>x.remove()); const l=document.createElement('div'); l.className='hslab'; l.style.left=h.x+'%'; l.style.top=h.y+'%'; l.innerHTML=h.t+'<span>'+h.e+'</span>'; st.appendChild(l); setTimeout(()=>l.remove(),1900); })); }
   if(!fresh){ const tgt = book.querySelector('.q') || book.querySelector('.lines p.cur'); if(tgt) setTimeout(()=>tgt.scrollIntoView({block:'nearest',behavior:'smooth'}),60); }
   if(p.q && st>=n){
     book.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{
