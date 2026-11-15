@@ -485,15 +485,14 @@ function audio() {
   const src = ac.createBufferSource(); src.buffer = b; src.loop = true; const f = ac.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 700;
   waveGain = ac.createGain(); waveGain.gain.value = 0; src.connect(f); f.connect(waveGain); waveGain.connect(master); src.start();
 }
-function tone(fr, d, type = 'sine', v = 0.2, when = 0) { if (!ac || muted) return; const t = ac.currentTime + when, o = ac.createOscillator(), g = ac.createGain(); o.type = type; o.frequency.value = fr; g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + d); o.connect(g); g.connect(master); o.start(t); o.stop(t + d + 0.05); }
+function tone(fr, d, type = 'sine', v = 0.2, when = 0) { return; if (!ac || muted) return; const t = ac.currentTime + when, o = ac.createOscillator(), g = ac.createGain(); o.type = type; o.frequency.value = fr; g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + d); o.connect(g); g.connect(master); o.start(t); o.stop(t + d + 0.05); }
 function chime() { [784, 988, 1175, 1568].forEach((f, i) => tone(f, 0.5, 'triangle', 0.18, i * 0.11)); }
 function chirp() { const f = 2200 + Math.random() * 900; tone(f, 0.08, 'sine', 0.05); tone(f * 1.2, 0.08, 'sine', 0.05, 0.1); }
 function step() { tone(140 + Math.random() * 40, 0.06, 'triangle', 0.05); }
 function fixAr(s){ s=s.replace(/[ً-ْٰ]/g,'');
   var R=[[/(^|[^؀-ۿ])النعم(?=$|[^؀-ۿ])/g,'$1النِّعَم'],[/(^|[^؀-ۿ])نعمتين/g,'$1نِعْمَتَيْن'],[/(^|[^؀-ۿ])(ب|و|ف|ل|ك)?نعمة/g,'$1$2نِعْمَة'],[/(^|[^؀-ۿ])نعم الله/g,'$1نِعَمَ الله'],[/(^|[^؀-ۿ])نعمه(?=$|[^؀-ۿ])/g,'$1نِعَمِه']];
   R.forEach(function(r){ s=s.replace(r[0],r[1]); }); return s; }
-function say(text) { if (muted || !window.speechSynthesis) return; try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(fixAr(text).replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu, '')); u.lang = 'ar-SA'; u.rate = 0.92; const v = speechSynthesis.getVoices().find((x) => /^ar/i.test(x.lang)); if (v) u.voice = v; speechSynthesis.speak(u); } catch (e) {} }
-$('#mute').onclick = () => { muted = !muted; $('#mute').textContent = muted ? '🔇' : '🔊'; if (master) master.gain.value = muted ? 0 : 0.8; if (muted && window.speechSynthesis) speechSynthesis.cancel(); };
+function say(text) { return; if (muted || !window.speechSynthesis) return; try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(fixAr(text).replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu, '')); u.lang = 'ar-SA'; u.rate = 0.92; const v = speechSynthesis.getVoices().find((x) => /^ar/i.test(x.lang)); if (v) u.voice = v; speechSynthesis.speak(u); } catch (e) {} }
 $('#fs').onclick = () => { try { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); } catch (e) {} };
 
 // ---------------------------------------------------------------- confetti (2D overlay)
@@ -604,5 +603,5 @@ function frame() {
 addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
 frame();
 $('#loading').textContent = '';
-$('#go').onclick = () => { audio(); started = true; camYaw = Math.PI; $('#start').style.display = 'none'; say('هيا نتجول مع سلمان في حي التعاون'); };
+$('#go').onclick = () => { started = true; camYaw = Math.PI; $('#start').style.display = 'none'; say('هيا نتجول مع سلمان في حي التعاون'); };
 window.__game = { player, ZONES, keys, answer, closeQuiz, get done() { return doneN; }, get score() { return score; }, teleport(x, z) { player.position.set(x, 0, z); } };
