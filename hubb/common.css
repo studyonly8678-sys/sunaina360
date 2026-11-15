@@ -1,0 +1,40 @@
+@font-face{font-family:'Lalezar';src:url(fonts/lalezar.woff2) format('woff2');font-display:swap}
+@font-face{font-family:'Tajawal';font-weight:500;src:url(fonts/tajawal-500.woff2) format('woff2');font-display:swap}
+@font-face{font-family:'Tajawal';font-weight:700;src:url(fonts/tajawal-700.woff2) format('woff2');font-display:swap}
+@font-face{font-family:'Tajawal';font-weight:900;src:url(fonts/tajawal-900.woff2) format('woff2');font-display:swap}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:'Tajawal',Tahoma,Arial,sans-serif;color:#22313f;overflow-x:hidden;user-select:none}
+h1,h2,.display{font-family:'Lalezar','Tajawal',Tahoma,sans-serif;font-weight:400}
+button{font-family:inherit;cursor:pointer;border:0}
+.topbar{position:fixed;top:12px;left:12px;display:flex;gap:8px;z-index:50}
+.ic{width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,.9);font-size:26px;box-shadow:0 4px 0 rgba(0,0,0,.15);transition:transform .15s}
+.ic:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+.btn3d{font-family:'Lalezar','Tajawal',sans-serif;font-size:30px;padding:14px 34px;border-radius:22px;color:#fff;position:relative;transition:transform .1s,box-shadow .1s}
+.btn3d:active{transform:translateY(5px)!important}
+.btn3d.green{background:#2fbf71;box-shadow:0 7px 0 #1d8a4f}
+.btn3d.red{background:#f0545c;box-shadow:0 7px 0 #b9343b}
+.btn3d.gold{background:#ffb703;box-shadow:0 7px 0 #c98700;color:#4a2c00}
+.btn3d.blue{background:#2b8cee;box-shadow:0 7px 0 #1a5fa8}
+.btn3d.green:active{box-shadow:0 2px 0 #1d8a4f}.btn3d.red:active{box-shadow:0 2px 0 #b9343b}
+.btn3d.gold:active{box-shadow:0 2px 0 #c98700}.btn3d.blue:active{box-shadow:0 2px 0 #1a5fa8}
+.screen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column}
+.screen.on{display:flex;animation:fadeIn .5s}
+@keyframes fadeIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+@keyframes pop{0%{transform:scale(.3)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-14px)}40%{transform:translateX(12px)}60%{transform:translateX(-8px)}80%{transform:translateX(6px)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes spinIn{from{transform:rotate(-30deg) scale(2.4);opacity:0}to{transform:rotate(-12deg) scale(1);opacity:1}}
+.shake{animation:shake .5s}
+.pop{animation:pop .5s cubic-bezier(.2,1.4,.4,1)}
+.mascot{position:relative;display:flex;align-items:flex-end;gap:10px}
+.mascot img{width:130px;animation:bob 2.6s ease-in-out infinite;filter:drop-shadow(0 6px 6px rgba(0,0,0,.2))}
+.bubble{background:#fff;color:#22313f;border-radius:22px;padding:14px 20px;font-size:24px;font-weight:700;max-width:520px;box-shadow:0 6px 18px rgba(0,0,0,.15);position:relative;line-height:1.5}
+.bubble:after{content:'';position:absolute;bottom:18px;left:-14px;border:10px solid transparent;border-right-color:#fff}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:99}
+.stars{font-size:34px;letter-spacing:4px}
+.cert{background:#fffdf3;border:8px double #e0b13c;border-radius:28px;padding:28px 44px;text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.25);max-width:760px;width:92vw}
+.cert h1{font-size:54px;color:#c97a00}
+.cert p{font-size:26px;font-weight:700;margin:8px 0}
+.cert img.medal{width:150px;animation:pop .8s}
+.namebox{font-family:'Tajawal';font-size:26px;border:3px dashed #e0b13c;border-radius:14px;padding:6px 14px;text-align:center;width:340px;max-width:80vw;background:#fff}

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>درب المحبة – أحب الله تعالى</title>
+<link rel="stylesheet" href="../common.css">
+<style>
+body{background:linear-gradient(#a8e3ff,#e9f9ff 55%,#bfe8a0 55%,#86c95e);overflow:hidden}
+.hills{position:fixed;left:0;right:0;bottom:0;height:46%;pointer-events:none}
+#intro .title{font-size:76px;color:#7a2e8f;text-shadow:0 5px 0 #fff,0 10px 20px rgba(0,0,0,.18)}
+#intro .sub{font-size:28px;font-weight:900;color:#3a2a4f;margin:6px 0 20px;text-align:center;max-width:900px}
+/* الطريق */
+.track{position:fixed;left:2vw;right:2vw;top:12px;height:120px;z-index:5}
+.track svg{width:100%;height:100%}
+.walker{position:absolute;top:-6px;width:70px;transition:right 1.1s cubic-bezier(.4,1.3,.5,1);transform:translateX(50%)}
+.walker img{width:100%;filter:drop-shadow(0 4px 4px rgba(0,0,0,.25))}
+.gate{position:absolute;left:0;top:2px;font-size:62px}
+.heartsBar{position:absolute;left:84px;top:84px;font-size:22px;letter-spacing:2px}
+#play{justify-content:flex-start;padding-top:150px}
+.station{font-family:'Lalezar';font-size:34px;color:#3a2a4f;background:rgba(255,255,255,.85);border-radius:20px;padding:4px 22px;margin-bottom:12px}
+.pair{display:flex;gap:28px;align-items:stretch;justify-content:center;width:min(1100px,96vw)}
+.opt{flex:1;max-width:470px;background:#fff;border-radius:24px;padding:12px;cursor:pointer;box-shadow:0 8px 0 #c9b6dd,0 14px 28px rgba(0,0,0,.15);transition:transform .2s;position:relative;display:flex;flex-direction:column;align-items:center}
+.opt:hover{transform:translateY(-6px) rotate(-.5deg)}
+.opt .pic{width:100%;aspect-ratio:1.25;border-radius:16px;overflow:hidden;background:#f3ecfb;display:flex;align-items:center;justify-content:center;font-size:110px}
+.opt .pic img{width:100%;height:100%;object-fit:cover}
+.opt p{font-family:'Lalezar';font-size:30px;color:#2a2340;text-align:center;margin-top:8px;line-height:1.25}
+.opt.ok{box-shadow:0 8px 0 #1d8a4f,0 0 0 6px #2fbf71}
+.opt.no{box-shadow:0 8px 0 #b9343b,0 0 0 6px #f0545c;animation:shake .5s}
+.opt .badge{position:absolute;top:-18px;left:-14px;font-size:52px;animation:pop .5s}
+.or{align-self:center;font-family:'Lalezar';font-size:40px;color:#7a2e8f;background:#fff;border-radius:50%;width:72px;height:72px;display:flex;align-items:center;justify-content:center;flex:none;box-shadow:0 5px 0 #c9b6dd}
+.say{display:flex;align-items:flex-end;gap:10px;margin-top:14px;min-height:96px}
+.say img{width:80px}
+.say .bubble{font-size:23px;opacity:0;transition:opacity .3s}
+.say .bubble.on{opacity:1}
+#nextBtn{display:none}
+#end .cert h1{color:#7a2e8f}
+.hadith{font-size:24px;line-height:1.8;background:#f6efff;border-radius:18px;padding:10px 18px;margin:10px 0}
+</style>
+</head>
+<body>
+<svg class="hills" viewBox="0 0 1200 400" preserveAspectRatio="none"><path d="M0 120 Q200 40 420 110 T820 90 T1200 110 V400 H0Z" fill="#9fd77a"/><path d="M0 200 Q300 120 600 190 T1200 170 V400 H0Z" fill="#7cc255"/></svg>
+
+<section class="screen on" id="intro">
+  <h1 class="title">🛤️ دربُ المحبة</h1>
+  <p class="sub">سلمان يريد أن يصل إلى بوابة المحبة 🌸 في كل محطة عملان… اختاروا العمل الذي يقرّب إلى الله تعالى ليتقدّم سلمان خطوة!</p>
+  <div class="mascot"><img src="../img/st5.png" alt="سلمان"><div class="bubble">فكّروا قبل أن تختاروا 🤔<br>واسألوا أنفسكم: <b>هل هذا العمل يحبّه الله؟</b></div></div>
+  <button class="btn3d green" style="margin-top:24px" id="startBtn">👣 لنبدأ الرحلة</button>
+</section>
+
+<div class="track" id="track" style="display:none">
+  <svg viewBox="0 0 1000 120" preserveAspectRatio="none"><path d="M10 80 C150 40 250 110 400 70 S650 40 800 80 S950 60 990 70" stroke="#e8c98f" stroke-width="30" fill="none" stroke-linecap="round"/><path d="M10 80 C150 40 250 110 400 70 S650 40 800 80 S950 60 990 70" stroke="#fff" stroke-width="3" stroke-dasharray="14 14" fill="none"/></svg>
+  <div class="gate">🌸🚪🌸</div>
+  <div class="heartsBar" id="hearts"></div>
+  <div class="walker" id="walker" style="right:0"><img src="../img/st5.png" alt=""></div>
+</div>
+
+<section class="screen" id="play">
+  <div class="station" id="stTitle"></div>
+  <div class="pair" id="pair"></div>
+  <div class="say"><img src="../img/st6.png" alt=""><div class="bubble" id="why"></div><button class="btn3d blue" id="nextBtn">المحطة التالية ⬅</button></div>
+</section>
+
+<section class="screen" id="end">
+  <div class="cert">
+    <img class="medal" src="../img/st6.png" alt="" style="width:130px">
+    <h1>وصل سلمان إلى بوابة المحبة! 🌸</h1>
+    <p id="endTxt"></p>
+    <div class="hadith">قال رجلٌ للنبي ﷺ: أعددتُ للساعة <b>حبَّ الله ورسوله</b>،<br>فقال ﷺ: <b>«فإنّك مع من أحببت»</b></div>
+    <p style="font-size:22px;color:#6b5a80">﴿وَالَّذِينَ آمَنُوا أَشَدُّ حُبًّا لِلَّهِ﴾</p>
+    <button class="btn3d blue" onclick="location.reload()" style="margin-top:8px">↺ رحلة جديدة</button>
+  </div>
+</section>
+
+<script src="../common.js"></script>
+<script>
+T.topbar();
+var ST=[
+ {a:{img:'d1',t:'يحافظ على صلاته في وقتها'},b:{img:'d5',t:'يلعب ويؤخّر الصلاة حين يناديه أبوه'},w:'الصلاة في وقتها من أحبّ الأعمال إلى الله، أمّا تأخيرها للّعب فلا يقرّب منه.'},
+ {a:{img:'d6',t:'يدير ظهره لأمه ولا يساعدها'},b:{img:'d3',t:'تدعو الله وتذكره'},w:'الدعاء والذكر يقرّباننا من الله، وعقوق الأم لا يحبه الله.'},
+ {a:{img:'d2',t:'تتلو القرآن الكريم'},b:{img:'d8',t:'يسخران من زميلهما'},w:'القرآن كلام الله، وتلاوته تقرّبنا منه، والسخرية تؤذي الناس ولا يحبها الله.'},
+ {a:{img:'d7',t:'يرمي العلبة في الشارع'},b:{img:'d4',t:'ينظّفون الشاطئ للناس جميعًا'},w:'فعل الخير للناس جميعًا يحبه الله، ورمي النفايات يؤذيهم.'},
+ {a:{e:'🪙',t:'يتصدّق من مصروفه على محتاج'},b:{e:'🤥',t:'يكذب على معلّمه'},w:'الصدقة تقرّب إلى الله، والكذب لا يحبه الله.'},
+ {a:{e:'🍽️',t:'يأكل دون أن يقول: بسم الله'},b:{e:'🤲',t:'يقول: الحمد لله بعد الطعام'},w:'حمد الله على النعمة شكرٌ له يقرّبنا منه، ونبدأ طعامنا ببسم الله.'}
+];
+// الصحيح في كل محطة
+var GOOD=['a','b','a','b','a','b'];
+var k=0,score=0,tries=0,busy=false,order=[];
+function start(){ order=ST.map(function(s,i){return i}); k=0; score=0; T.$('#track').style.display=''; T.show('play'); hearts(); load(); }
+function hearts(){ var s=''; for(var i=0;i<ST.length;i++) s+= i<k?'💜':'🤍'; T.$('#hearts').textContent=s; }
+function walkTo(){ T.$('#walker').style.right=(k/ST.length*88)+'%'; }
+function card(o,side){
+  var d=document.createElement('div'); d.className='opt'; d.dataset.side=side;
+  d.innerHTML='<div class="pic">'+(o.img?'<img src="../img/'+o.img+'.jpg" alt="">':o.e)+'</div><p>'+o.t+'</p>';
+  d.onclick=function(){ choose(d); };
+  return d;
+}
+function load(){
+  busy=false; tries=0; var s=ST[k], p=T.$('#pair'); p.innerHTML='';
+  T.$('#stTitle').textContent='المحطة '+(k+1)+' من '+ST.length+' 🚩';
+  p.appendChild(card(s.a,'a')); var or=document.createElement('div'); or.className='or'; or.textContent='أم'; p.appendChild(or); p.appendChild(card(s.b,'b'));
+  T.$('#why').classList.remove('on'); T.$('#nextBtn').style.display='none';
+  T.restart(p,'pop'); T.play('whoosh'); walkTo();
+}
+function choose(d){
+  if(busy) return; var s=ST[k];
+  if(d.dataset.side===GOOD[k]){
+    busy=true; if(tries===0) score++; d.classList.add('ok'); d.insertAdjacentHTML('beforeend','<div class="badge">💚</div>');
+    T.play('correct'); T.confetti(50);
+    T.$('#why').innerHTML='<b>أحسنتم!</b> '+s.w; T.$('#why').classList.add('on'); T.say(s.w);
+    T.$('#nextBtn').style.display='inline-block'; T.$('#nextBtn').textContent=k<ST.length-1?'المحطة التالية ⬅':'🌸 إلى البوابة';
+    k++; hearts(); setTimeout(walkTo,300); T.play('grow');
+  }else{
+    tries++; d.classList.remove('no'); void d.offsetWidth; d.classList.add('no'); T.play('wrong');
+    T.$('#why').innerHTML='🤔 هل هذا العمل يحبه الله؟ فكّروا في العمل الآخر.'; T.$('#why').classList.add('on');
+  }
+}
+function next(){ if(k<ST.length) load(); else end(); }
+function end(){ T.show('end'); T.play('fanfare'); T.confetti(240); T.$('#endTxt').textContent='اخترتم '+score+' من '+ST.length+' أعمال صحيحة من المحاولة الأولى 💜'; }
+T.$('#startBtn').onclick=start; T.$('#nextBtn').onclick=next;
+document.addEventListener('keydown',function(e){ if(e.key==='Enter'&&T.$('#nextBtn').style.display!=='none') next(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>عجلة المحبة – أحب الله تعالى</title>
+<link rel="stylesheet" href="../common.css">
+<style>
+body{background:radial-gradient(circle at 50% 45%,#2e1a5e,#140b30 75%);color:#fff;overflow:hidden}
+.stars{position:fixed;inset:0;pointer-events:none}
+.stars i{position:absolute;width:3px;height:3px;background:#fff;border-radius:50%;animation:tw 2s infinite}
+@keyframes tw{50%{opacity:.2}}
+.layout{display:flex;align-items:center;justify-content:center;gap:4vw;width:100%;height:100%}
+.wheelBox{position:relative;width:min(78vh,48vw);aspect-ratio:1}
+#wheel{width:100%;height:100%;transition:transform 5.2s cubic-bezier(.12,.75,.12,1);filter:drop-shadow(0 0 30px rgba(255,207,74,.35))}
+.pointer{position:absolute;top:-14px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:26px solid transparent;border-right:26px solid transparent;border-top:52px solid #ffcf4a;filter:drop-shadow(0 4px 4px rgba(0,0,0,.5));z-index:3}
+.hub{position:absolute;inset:38%;border-radius:50%;background:radial-gradient(#fff,#ffe7a3);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 8px #ffcf4a,0 6px 20px rgba(0,0,0,.4);cursor:pointer;z-index:2}
+.hub img{width:80%}
+.side{width:min(560px,40vw);display:flex;flex-direction:column;align-items:center;gap:16px}
+.side h1{font-size:64px;color:#ffcf4a;text-shadow:0 4px 0 #8a5a00}
+.qcard{width:100%;min-height:250px;background:#fff;color:#2a2340;border-radius:28px;padding:22px 26px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;box-shadow:0 12px 0 #c9a227}
+.qcard .ic{font-size:64px;line-height:1}
+.qcard .q{font-family:'Lalezar';font-size:36px;line-height:1.35}
+.qcard .a{font-size:24px;font-weight:900;color:#0f6b3a;background:#eafbef;border-radius:16px;padding:8px 14px;display:none}
+.qcard .a.on{display:block;animation:pop .4s}
+.row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.left{font-size:22px;font-weight:900;color:#d9ccff}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div class="layout">
+  <div class="side">
+    <h1>🎡 عجلةُ المحبة</h1>
+    <div class="qcard" id="card"><div class="ic">💜</div><div class="q" id="q">أدِر العجلة… وأجِب عن سؤالها!</div><div class="a" id="a"></div></div>
+    <div class="row"><button class="btn3d gold" id="spinBtn">🎡 أدِر العجلة</button><button class="btn3d green" id="ansBtn" style="display:none">👀 الإجابة</button></div>
+    <div class="left" id="left"></div>
+  </div>
+  <div class="wheelBox"><div class="pointer"></div><svg id="wheel" viewBox="-210 -210 420 420"></svg><div class="hub" id="hub"><img src="../img/st6.png" alt=""></div></div>
+</div>
+
+<script src="../common.js"></script>
+<script>
+T.topbar();
+(function(){ var s=T.$('#stars'); for(var i=0;i<70;i++){ var e=document.createElement('i'); e.style.left=Math.random()*100+'%'; e.style.top=Math.random()*100+'%'; e.style.animationDelay=Math.random()*2+'s'; s.appendChild(e);} })();
+var Q=[
+ {ic:'🎁',l:'نِعَم',c:'#2fbf71',q:'عدِّد نعمتين من نعم الله عليك.',a:'مثل: العقل – الصحة – الرزق – التوفيق – الأسرة – الماء.'},
+ {ic:'🕌',l:'يقرّبني',c:'#2b8cee',q:'اذكر عملًا يقرّبك من الله تعالى.',a:'المحافظة على الصلاة – تلاوة القرآن – الذكر والدعاء – فعل الخير للناس.'},
+ {ic:'📖',l:'آية',c:'#9b5de5',q:'أكمل الآية: ﴿وَالَّذِينَ آمَنُوا ...﴾',a:'﴿وَالَّذِينَ آمَنُوا أَشَدُّ حُبًّا لِلَّهِ﴾'},
+ {ic:'🌟',l:'حديث',c:'#ff8a3d',q:'ماذا قال النبي ﷺ للرجل الذي أعدّ حبّ الله ورسوله؟',a:'«فإنّك مع من أحببت».'},
+ {ic:'🟥',l:'أحمر؟',c:'#f0545c',q:'أخضر أم أحمر؟ ولدٌ يكذب على أمه.',a:'🟥 لا يقرّبه من الله؛ لأن الله لا يحب الكذب.'},
+ {ic:'🧠',l:'شكر',c:'#14b8a6',q:'كيف تشكر الله على نعمة العقل؟',a:'أستعمله في التعلم والخير، وأقول: الحمد لله.'},
+ {ic:'💜',l:'أحبّه',c:'#e056a0',q:'أكمل: أُحبُّ الله تعالى لأنه…',a:'خلقني في أحسن صورة – يرزقني – يشفيني – يوفقني إلى كل خير.'},
+ {ic:'✨',l:'وعدي',c:'#ffb703',q:'ما العمل الذي ستفعله هذا الأسبوع لتتقرّب إلى الله؟',a:'إجابات التلاميذ: أصلي في وقتها – أقرأ سورة – أساعد جارنا…'}
+];
+var N=Q.length, used=[], angle=0, spinning=false, cur=-1;
+function draw(){
+  var svg=T.$('#wheel'), h='', R=200, step=360/N;
+  Q.forEach(function(s,i){
+    var a0=(i*step-90-step/2)*Math.PI/180, a1=((i+1)*step-90-step/2)*Math.PI/180;
+    var x0=R*Math.cos(a0),y0=R*Math.sin(a0),x1=R*Math.cos(a1),y1=R*Math.sin(a1);
+    var dim=used.indexOf(i)>-1;
+    h+='<path d="M0 0 L'+x0+' '+y0+' A'+R+' '+R+' 0 0 1 '+x1+' '+y1+'Z" fill="'+s.c+'" opacity="'+(dim?.35:1)+'" stroke="#fff" stroke-width="4"/>';
+    var mid=(i*step-90)*Math.PI/180, tx=130*Math.cos(mid), ty=130*Math.sin(mid);
+    h+='<g transform="translate('+tx+' '+ty+') rotate('+(i*step)+')"><text text-anchor="middle" y="-6" font-size="40">'+s.ic+'</text><text text-anchor="middle" y="34" font-size="24" font-family="Lalezar,Tajawal" fill="#fff">'+s.l+'</text></g>';
+  });
+  h+='<circle r="204" fill="none" stroke="#ffcf4a" stroke-width="10"/>';
+  for(var i=0;i<N*2;i++){ var t=i*360/(N*2)*Math.PI/180; h+='<circle cx="'+(204*Math.cos(t))+'" cy="'+(204*Math.sin(t))+'" r="5" fill="#fff"/>'; }
+  svg.innerHTML=h;
+  T.$('#left').textContent=used.length<N?('بقي '+(N-used.length)+' أسئلة في العجلة'):'انتهت الأسئلة كلها! 🎉';
+}
+function spin(){
+  if(spinning) return; var free=[]; for(var i=0;i<N;i++) if(used.indexOf(i)<0) free.push(i);
+  if(!free.length){ T.confetti(200); T.play('fanfare'); return; }
+  spinning=true; T.$('#ansBtn').style.display='none'; T.$('#a').classList.remove('on');
+  var pick=free[Math.floor(Math.random()*free.length)], step=360/N;
+  var target=360-pick*step; var base=angle-(angle%360);
+  angle=base+360*6+target+(Math.random()*step*.5-step*.25);
+  T.$('#wheel').style.transform='rotate('+angle+'deg)';
+  var ticks=0, iv=setInterval(function(){ T.play('tick'); if(++ticks>34) clearInterval(iv); },140);
+  setTimeout(function(){
+    spinning=false; cur=pick; used.push(pick); var s=Q[pick];
+    T.$('#card').querySelector('.ic').textContent=s.ic; T.$('#q').textContent=s.q; T.$('#a').textContent=s.a;
+    T.restart(T.$('#card'),'pop'); T.play('correct'); T.say(s.q); T.$('#ansBtn').style.display=''; draw();
+    if(used.length===N) T.$('#spinBtn').textContent='🎉 أحسنتم';
+  },5300);
+}
+T.$('#spinBtn').onclick=spin; T.$('#hub').onclick=spin;
+T.$('#ansBtn').onclick=function(){ T.$('#a').classList.add('on'); T.play('grow'); if(used.length===N){ T.confetti(220); T.play('fanfare'); } };
+draw();
+</script>
+</body>
+</html>
