@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>كنز الفوائد – درس التعاون</title>
+<link rel="stylesheet" href="../common.css">
+<style>
+body{background:linear-gradient(#7fd3ff 0%,#bfeaff 46%,#1fa3d6 46%,#0b6fa8 100%)}
+.sun{position:fixed;top:40px;right:70px;width:110px;height:110px;border-radius:50%;background:radial-gradient(#fff6b0,#ffd23f 60%,#ffb703);box-shadow:0 0 60px #ffe26b;animation:bob 6s ease-in-out infinite}
+.cloud{position:fixed;background:#fff;border-radius:60px;opacity:.9;animation:drift linear infinite}
+.cloud:before,.cloud:after{content:'';position:absolute;background:#fff;border-radius:50%}
+.cloud:before{width:60%;height:140%;top:-60%;left:15%}.cloud:after{width:40%;height:110%;top:-40%;right:12%}
+@keyframes drift{from{transform:translateX(-30vw)}to{transform:translateX(130vw)}}
+.waves{position:fixed;left:0;right:0;top:calc(46% - 34px);height:70px;pointer-events:none}
+.waves svg{width:200%;height:70px;animation:wave 9s linear infinite}
+.waves.w2 svg{animation-duration:6s;opacity:.6}
+@keyframes wave{from{transform:translateX(0)}to{transform:translateX(50%)}}
+.island{position:fixed;bottom:-60px;left:-80px;width:420px;height:200px;background:radial-gradient(ellipse at 50% 30%,#ffe3a3,#e9b866);border-radius:50%}
+.palm{position:fixed;bottom:80px;left:70px;font-size:120px}
+/* intro */
+#intro .title{font-size:72px;color:#fff;text-shadow:0 5px 0 #0b5f8f,0 10px 22px rgba(0,0,0,.3);margin-bottom:10px}
+#intro .sub{font-size:28px;color:#fff;font-weight:900;text-shadow:0 2px 6px rgba(0,0,0,.35);margin-bottom:24px}
+/* play */
+#play{justify-content:flex-start;padding-top:22px}
+.hud{display:flex;gap:18px;align-items:center;background:rgba(255,255,255,.85);border-radius:20px;padding:8px 20px;font-size:24px;font-weight:900;box-shadow:0 4px 0 rgba(0,0,0,.1)}
+.dots{display:flex;gap:6px}.dots i{width:18px;height:18px;border-radius:50%;background:#d6e4ee;display:block}
+.dots i.ok{background:#2fbf71}.dots i.now{background:#ffb703;animation:pop .6s infinite alternate}
+.stage{position:relative;width:min(1100px,96vw);flex:1;display:flex;align-items:center;justify-content:center}
+.scroll{position:relative;width:min(560px,80vw);min-height:220px;padding:36px 40px;border-radius:26px;background:linear-gradient(#fff8e1,#f7e2b0);border:6px solid #d9a441;box-shadow:0 14px 30px rgba(0,0,0,.25);text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;animation:bob 3s ease-in-out infinite}
+.scroll .ico{font-size:64px;line-height:1}
+.scroll .txt{font-family:'Lalezar','Tajawal';font-size:44px;color:#6b3e00;line-height:1.35}
+.scroll .spk{position:absolute;top:10px;left:12px;font-size:26px;background:#fff;border-radius:50%;width:46px;height:46px;box-shadow:0 3px 0 #d9a441}
+.scroll.fly{transition:transform .8s cubic-bezier(.5,-.3,.6,1),opacity .8s;animation:none}
+.scroll.sink{transition:transform 1s ease-in,opacity 1s;animation:none}
+.chestBox{position:absolute;right:-10px;bottom:20px;text-align:center}
+.chestBox img{width:190px;filter:drop-shadow(0 8px 8px rgba(0,0,0,.3))}
+.chestBox.glow img{animation:pop .6s}
+.gems{display:flex;gap:8px;justify-content:center;margin-top:-6px}
+.gems span{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.6);border:3px dashed #fff;display:flex;align-items:center;justify-content:center;font-size:26px}
+.gems span.on{background:#fff3c4;border:3px solid #ffb703;animation:pop .6s}
+.choices{display:flex;gap:30px;margin:12px 0 26px}
+.antHelp{position:absolute;left:0;bottom:10px}
+.antHelp .bubble{font-size:21px;max-width:300px;opacity:0;transition:opacity .3s}
+.antHelp .bubble.on{opacity:1}
+/* chest open */
+#open .bigChest{width:300px;cursor:pointer;filter:drop-shadow(0 12px 14px rgba(0,0,0,.35));animation:bob 2s ease-in-out infinite}
+#open .bigChest.burst{animation:pop .7s}
+.rays{position:absolute;width:700px;height:700px;background:repeating-conic-gradient(rgba(255,230,120,.55) 0 10deg,transparent 10deg 20deg);border-radius:50%;opacity:0;transition:opacity 1s;animation:rot 20s linear infinite;pointer-events:none;-webkit-mask:radial-gradient(#000 20%,transparent 68%);mask:radial-gradient(#000 20%,transparent 68%)}
+.rays.on{opacity:1}
+@keyframes rot{to{transform:rotate(360deg)}}
+.treasure{display:flex;gap:22px;flex-wrap:wrap;justify-content:center;margin-top:20px;position:relative}
+.tcard{width:250px;min-height:150px;perspective:900px;cursor:pointer}
+.tcard .in{position:relative;width:100%;height:150px;transition:transform .7s;transform-style:preserve-3d}
+.tcard.hid .in{transform:rotateY(180deg)}
+.tcard .f,.tcard .b{position:absolute;inset:0;border-radius:22px;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:12px;text-align:center}
+.tcard .f{background:linear-gradient(#fff8e1,#ffe39a);border:5px solid #ffb703;font-family:'Lalezar';font-size:30px;color:#6b3e00;box-shadow:0 8px 0 #c98700}
+.tcard .f b{font-size:46px;line-height:1}
+.tcard .b{background:linear-gradient(#5b6cff,#3a47c9);color:#fff;font-size:80px;font-family:'Lalezar';transform:rotateY(180deg);box-shadow:0 8px 0 #263090}
+.tcard.wait{visibility:hidden}
+#open h2{font-size:52px;color:#fff;text-shadow:0 4px 0 #0b5f8f}
+#open .hint{font-size:24px;color:#fff;font-weight:900;text-shadow:0 2px 4px rgba(0,0,0,.4);margin:6px 0}
+</style>
+</head>
+<body>
+<div class="sun"></div>
+<div class="cloud" style="top:60px;width:160px;height:46px;animation-duration:48s"></div>
+<div class="cloud" style="top:150px;width:110px;height:34px;animation-duration:70s;animation-delay:-30s"></div>
+<div class="waves"><svg viewBox="0 0 1200 70" preserveAspectRatio="none"><path d="M0 35 Q75 5 150 35 T300 35 T450 35 T600 35 T750 35 T900 35 T1050 35 T1200 35 V70 H0Z" fill="#1fa3d6"/></svg></div>
+<div class="waves w2"><svg viewBox="0 0 1200 70" preserveAspectRatio="none"><path d="M0 40 Q75 15 150 40 T300 40 T450 40 T600 40 T750 40 T900 40 T1050 40 T1200 40 V70 H0Z" fill="#7fd0f2"/></svg></div>
+<div class="island"></div><div class="palm">🌴</div>
+
+<!-- البداية -->
+<section class="screen on" id="intro">
+  <h1 class="title">🏴‍☠️ كنزُ الفوائد</h1>
+  <p class="sub">رسائلُ في زجاجاتٍ تطفو على البحر… أيُّها يحملُ فائدةً من فوائد التعاون؟</p>
+  <div class="mascot"><img src="../img/ant_point.png" alt="النملة القائدة"><div class="bubble">أنا القبطانة نَمْلة! 🐜<br>اجمعوا الفوائدَ الثلاثَ في الصندوق، وأرجِعوا غيرَها إلى البحر.</div></div>
+  <button class="btn3d gold" style="margin-top:26px" id="startBtn">⛵ أبحِروا!</button>
+</section>
+
+<!-- اللعب -->
+<section class="screen" id="play">
+  <div class="hud"><span>🍾 <b id="cnt">1</b> / <b id="tot">7</b></span><div class="dots" id="dots"></div><span class="stars" id="stars"></span></div>
+  <div class="stage">
+    <div class="scroll" id="card"><button class="spk" id="spk" title="اقرأ">🔊</button><div class="ico" id="cIco"></div><div class="txt" id="cTxt"></div></div>
+    <div class="chestBox" id="chestBox"><img src="../img/st_chest.png" alt="صندوق الكنز"><div class="gems" id="gems"><span></span><span></span><span></span></div></div>
+    <div class="antHelp"><div class="mascot"><img src="../img/ant_think.png" alt="" style="width:110px"><div class="bubble" id="help"></div></div></div>
+  </div>
+  <div class="choices">
+    <button class="btn3d green" id="yesBtn">🪙 فائدة ← إلى الكنز</button>
+    <button class="btn3d blue" id="noBtn">🌊 ليست فائدة ← إلى البحر</button>
+  </div>
+</section>
+
+<!-- فتح الصندوق -->
+<section class="screen" id="open">
+  <div class="rays" id="rays"></div>
+  <h2 id="openTitle">امتلأ الصندوق! اضغطوا عليه لفتحه 👆</h2>
+  <img class="bigChest" id="bigChest" src="../img/st_chest.png" alt="صندوق الكنز">
+  <div class="treasure" id="treasure"></div>
+  <p class="hint" id="openHint"></p>
+  <div style="display:flex;gap:18px;margin-top:14px">
+    <button class="btn3d red" id="hideBtn" style="display:none">🙈 تحدّي الذاكرة: أخفوا الفوائد</button>
+    <button class="btn3d gold" id="certBtn" style="display:none">🏅 شهادة صائد الكنز</button>
+  </div>
+</section>
+
+<!-- الشهادة -->
+<section class="screen" id="end">
+  <div class="cert">
+    <img class="medal" id="medal" src="../img/st_gold.png" alt="">
+    <h1>صائدو كنز الفوائد</h1>
+    <input class="namebox" placeholder="اكتبوا اسم المجموعة هنا">
+    <p id="endStars" class="stars"></p>
+    <p>عدّدنا فوائدَ التعاون الثلاث:<br>🤝 إنجازُ العمل في وقتٍ قصير · 💞 انتشارُ المحبة · 🌟 عونُ الله تعالى</p>
+    <p style="font-size:22px;color:#6b7a89">«واللهُ في عونِ العبدِ ما كانَ العبدُ في عونِ أخيه»</p>
+    <button class="btn3d blue" onclick="location.reload()" style="margin-top:12px">↺ العبوا من جديد</button>
+  </div>
+</section>
+
+<script src="../common.js"></script>
+<script>
+T.topbar();
+var CARDS=[
+ {i:'🤝',t:'نُنجزُ العملَ في وقتٍ قصير',y:1,g:'⏱️',h:''},
+ {i:'💞',t:'تنتشرُ المحبةُ بين الناس',y:1,g:'💞',h:''},
+ {i:'🌟',t:'ننالُ عونَ الله تعالى',y:1,g:'🌟',h:''},
+ {i:'😩',t:'يتعبُ كلُّ واحدٍ وحدَه',y:0,h:'هل التعاونُ يجعلنا نتعب وحدنا؟ أم نتقاسم العمل؟'},
+ {i:'😠',t:'يكثرُ الخصامُ والشجار',y:0,h:'المتعاونون يحبّ بعضُهم بعضًا… فهل يكثر بينهم الخصام؟'},
+ {i:'🐢',t:'يتأخرُ العملُ ولا يكتمل',y:0,h:'تذكّروا النمل! هل تأخّر عملُهم حين تعاونوا؟'},
+ {i:'💔',t:'يغضبُ الأصدقاءُ من بعضهم',y:0,h:'التعاون يقرّب القلوب… فكّروا مرة أخرى.'}
+];
+var order=[],k=0,firstTry=true,score=0,gem=0,busy=false;
+function stars(n,of){var s='';for(var i=0;i<of;i++)s+=i<n?'⭐':'☆';return s}
+function start(){
+  // نضمن ألا تأتي الفوائد الثلاث متتالية في البداية
+  order=T.shuffle(CARDS); k=0; score=0; gem=0;
+  var d=T.$('#dots'); d.innerHTML=''; order.forEach(function(){d.appendChild(document.createElement('i'))});
+  T.$('#tot').textContent=order.length; T.show('play'); T.play('whoosh'); next();
+}
+function next(){
+  busy=false; firstTry=true; var c=order[k], card=T.$('#card');
+  card.className='scroll'; card.style.transform=''; card.style.opacity='';
+  T.$('#cIco').textContent=c.i; T.$('#cTxt').textContent=c.t; T.$('#cnt').textContent=k+1;
+  [].forEach.call(T.$('#dots').children,function(e,i){e.className=i<k?'ok':(i===k?'now':'')});
+  T.$('#stars').textContent=stars(score,order.length).slice(0, 2*order.length);
+  T.$('#help').classList.remove('on'); T.restart(card,'pop');
+}
+function answer(isYes){
+  if(busy) return; var c=order[k], card=T.$('#card');
+  if((isYes?1:0)===c.y){
+    busy=true; if(firstTry) score++;
+    if(c.y){
+      T.play('coin'); var cb=T.$('#chestBox').getBoundingClientRect(), r=card.getBoundingClientRect();
+      card.classList.add('fly');
+      card.style.transform='translate('+((cb.left+cb.width/2)-(r.left+r.width/2))+'px,'+((cb.top+60)-(r.top+r.height/2))+'px) scale(.12) rotate(20deg)';
+      card.style.opacity='.2';
+      setTimeout(function(){ var g=T.$('#gems').children[gem++]; g.textContent=c.g; g.className='on'; T.restart(T.$('#chestBox'),'glow'); T.play('correct'); },750);
+    }else{
+      T.play('whoosh'); card.classList.add('sink'); card.style.transform='translateY(60vh) rotate(-25deg) scale(.5)'; card.style.opacity='0';
+      setTimeout(function(){T.play('correct')},500);
+    }
+    setTimeout(function(){ k++; if(k<order.length) next(); else finish(); },1300);
+  }else{
+    firstTry=false; T.play('wrong'); T.restart(card,'shake');
+    var h=T.$('#help'); h.textContent=c.y?'انظروا جيدًا! هذه نتيجةٌ جميلة يحصل عليها المتعاونون 😉':c.h; h.classList.add('on');
+  }
+}
+function finish(){ T.show('open'); T.play('fanfare'); }
+var opened=false;
+T.$('#bigChest').onclick=function(){
+  if(opened) return; opened=true; var b=this; b.classList.add('burst'); T.$('#rays').classList.add('on'); T.play('fanfare'); T.confetti(160);
+  T.$('#openTitle').textContent='✨ فوائدُ التعاون ✨'; b.style.width='170px';
+  var tr=T.$('#treasure'); tr.innerHTML='';
+  CARDS.filter(function(c){return c.y}).forEach(function(c,i){
+    var d=document.createElement('div'); d.className='tcard wait';
+    d.innerHTML='<div class="in"><div class="f"><b>'+c.i+'</b>'+c.t+'</div><div class="b">؟</div></div>';
+    d.onclick=function(){ if(d.classList.contains('hid')){ d.classList.remove('hid'); T.play('pop'); T.say(c.t); check(); } };
+    tr.appendChild(d);
+    setTimeout(function(){ d.classList.remove('wait'); T.restart(d,'pop'); T.play('coin'); T.say(c.t); }, 900+i*1700);
+  });
+  setTimeout(function(){ T.$('#hideBtn').style.display=''; T.$('#openHint').textContent='اقرؤوها معًا بصوتٍ عالٍ 📣'; }, 900+3*1700);
+};
+var hidden=false;
+T.$('#hideBtn').onclick=function(){
+  hidden=true; this.style.display='none'; T.play('whoosh');
+  [].forEach.call(document.querySelectorAll('.tcard'),function(d){d.classList.add('hid')});
+  T.$('#openHint').textContent='🧠 من يعدّد الفوائد الثلاث؟ اضغطوا على كل بطاقة بعد أن يذكرها التلميذ.';
+};
+function check(){
+  if(hidden && !document.querySelector('.tcard.hid')){ T.confetti(120); T.play('fanfare'); T.$('#openHint').textContent='أحسنتم! عدّدتم فوائد التعاون كلها 🎉'; T.$('#certBtn').style.display=''; }
+}
+T.$('#certBtn').onclick=function(){
+  T.show('end'); T.play('fanfare'); T.confetti(200);
+  T.$('#endStars').textContent=stars(score,order.length);
+  T.$('#medal').src='../img/'+(score>=6?'st_gold':score>=4?'st_silver':'st_bronze')+'.png';
+};
+T.$('#startBtn').onclick=start;
+T.$('#yesBtn').onclick=function(){answer(true)};
+T.$('#noBtn').onclick=function(){answer(false)};
+T.$('#spk').onclick=function(e){e.stopPropagation(); T.say(T.$('#cTxt').textContent)};
+document.addEventListener('keydown',function(e){ if(!T.$('#play').classList.contains('on'))return; if(e.key==='ArrowRight'||e.key==='1')answer(true); if(e.key==='ArrowLeft'||e.key==='2')answer(false); });
+</script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>شجرة التعاون – درس التعاون</title>
+<link rel="stylesheet" href="../common.css">
+<style>
+body{background:linear-gradient(#8fd8ff,#dff5ff 60%,#c8eeb0 60%,#8fcf6a);overflow:hidden}
+.sun{position:fixed;top:26px;right:40px;width:100px;height:100px;border-radius:50%;background:radial-gradient(#fff6b0,#ffd23f 60%,#ffb703);box-shadow:0 0 50px #ffe26b;display:flex;align-items:center;justify-content:center;font-size:44px;transition:transform .6s}
+.sun.happy{transform:scale(1.25) rotate(10deg)}
+#intro .title{font-size:76px;color:#2f7d32;text-shadow:0 5px 0 #fff,0 10px 18px rgba(0,0,0,.18)}
+#intro .sub{font-size:28px;font-weight:900;color:#28513a;margin:6px 0 22px;text-align:center;max-width:900px}
+#grow{justify-content:flex-start}
+.head{margin-top:14px;display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.85);border-radius:20px;padding:8px 22px;box-shadow:0 4px 0 rgba(0,0,0,.08)}
+.head h2{font-size:38px;color:#2f7d32}
+.head .count{font-family:'Lalezar';font-size:30px;color:#a0522d}
+.meter{width:220px;height:20px;border-radius:12px;background:#e3eedb;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#9be36c,#2f9e44);transition:width .6s}
+.treeWrap{position:relative;width:min(1050px,98vw);flex:1;max-height:calc(100vh - 210px)}
+.treeWrap svg{position:absolute;inset:0;width:100%;height:100%}
+.leaf{position:absolute;width:12.5%;min-height:8%;transform:translate(-50%,-50%) scale(0);background:linear-gradient(135deg,#7fd65b,#2f9e44);color:#fff;border-radius:0 70% 0 70%;padding:8px 12px;font-size:clamp(11px,1.25vw,16px);font-weight:900;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.25;box-shadow:0 4px 0 rgba(0,0,0,.12);cursor:pointer;transition:transform .7s cubic-bezier(.3,1.6,.5,1);text-shadow:0 1px 2px rgba(0,0,0,.3)}
+.leaf.on{transform:translate(-50%,-50%) scale(1) rotate(var(--r,0deg))}
+.leaf:nth-child(3n){background:linear-gradient(135deg,#a6e36a,#4caf50)}
+.leaf:nth-child(4n){background:linear-gradient(135deg,#5bc98a,#1f8f5a)}
+.leaf .nm{display:block;font-size:.8em;opacity:.9}
+.deco{position:absolute;font-size:clamp(22px,3vw,40px);transform:translate(-50%,-50%) scale(0);transition:transform .8s cubic-bezier(.3,1.6,.5,1);pointer-events:none}
+.deco.on{transform:translate(-50%,-50%) scale(1)}
+.bird{position:absolute;font-size:44px;top:8%;left:-10%;transition:left 4s ease-out,top 4s ease-out}
+.panel{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;background:rgba(255,255,255,.92);border-radius:24px;padding:10px 16px;margin-bottom:12px;box-shadow:0 6px 20px rgba(0,0,0,.12);width:min(1050px,98vw)}
+.panel input{font-family:'Tajawal';font-size:22px;font-weight:700;padding:12px 16px;border-radius:16px;border:3px solid #9be36c;outline:none}
+#actIn{flex:1;min-width:260px}#nameIn{width:170px}
+.panel .btn3d{font-size:26px;padding:10px 24px}
+.ideas{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;width:100%}
+.ideas button{background:#eef9e6;border:2px solid #9be36c;border-radius:30px;padding:5px 14px;font-size:17px;font-weight:700;color:#2f6b2f}
+.ideas button:hover{background:#d9f3c8}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;z-index:60}
+.modal.on{display:flex}
+.modal .box{background:#fff;border-radius:30px;padding:30px 40px;text-align:center;max-width:640px;animation:pop .5s;border:6px solid #9be36c}
+.modal .box .big{font-family:'Lalezar';font-size:44px;color:#2f7d32;line-height:1.4}
+.modal .box .who{font-size:24px;font-weight:900;color:#a0522d;margin:8px 0 16px}
+.ribbon{position:fixed;top:36%;left:50%;transform:translate(-50%,-50%) scale(0);background:#fffdf3;border:8px double #e0b13c;border-radius:30px;padding:22px 40px;text-align:center;z-index:55;box-shadow:0 18px 50px rgba(0,0,0,.25);transition:transform .7s cubic-bezier(.3,1.5,.5,1)}
+.ribbon.on{transform:translate(-50%,-50%) scale(1)}
+.ribbon h1{font-size:50px;color:#2f7d32}
+.ribbon p{font-size:26px;font-weight:900;margin:6px 0}
+.tools{position:fixed;bottom:14px;left:14px;display:flex;gap:8px;z-index:50}
+</style>
+</head>
+<body>
+<div class="sun" id="sun">😊</div>
+
+<section class="screen on" id="intro">
+  <h1 class="title">🌳 شجرةُ التعاون</h1>
+  <p class="sub">شجرةُ صفِّنا عاريةٌ تنتظرُ أوراقَكم! اكتب عملًا تعاونيًا ستقوم به هذا الأسبوع… فتنبتُ ورقتُك على الشجرة.</p>
+  <div class="mascot"><img src="../img/ant_write.png" alt=""><div class="bubble">كلُّ ورقةٍ وعدٌ صغير 🍃<br>وفي الحصة القادمة سأسألكم: <b>من نفَّذ وعده؟</b></div></div>
+  <button class="btn3d green" style="margin-top:24px" id="startBtn">🌱 لنزرع الشجرة</button>
+</section>
+
+<section class="screen" id="grow">
+  <div class="head"><h2>شجرةُ صفّنا</h2><span class="count">🍃 <span id="n">0</span> / <span id="goal">20</span></span><div class="meter"><i id="bar"></i></div></div>
+  <div class="treeWrap" id="wrap">
+    <svg viewBox="0 0 1000 620" preserveAspectRatio="xMidYMax meet">
+      <ellipse cx="500" cy="604" rx="330" ry="22" fill="#6fb84c" opacity=".6"/>
+      <path d="M455 610 C465 520 470 450 462 380 L538 380 C530 450 535 520 545 610 Z" fill="#8a5a35"/>
+      <path d="M470 600 C478 520 482 450 476 390" stroke="#6e4426" stroke-width="6" fill="none" opacity=".5"/>
+      <g stroke="#8a5a35" stroke-linecap="round" fill="none">
+        <path d="M480 400 C420 340 330 320 230 290" stroke-width="26"/>
+        <path d="M520 400 C580 340 670 320 770 290" stroke-width="26"/>
+        <path d="M495 390 C480 300 470 220 440 120" stroke-width="22"/>
+        <path d="M505 390 C530 300 560 220 600 130" stroke-width="20"/>
+        <path d="M330 315 C300 250 270 210 210 170" stroke-width="14"/>
+        <path d="M670 315 C700 250 740 210 800 175" stroke-width="14"/>
+        <path d="M455 230 C400 200 360 170 320 110" stroke-width="12"/>
+        <path d="M545 230 C600 200 640 170 690 105" stroke-width="12"/>
+      </g>
+      <g id="canopy" opacity="0" style="transition:opacity 1.2s">
+        <circle cx="500" cy="200" r="190" fill="#7fcf5e" opacity=".35"/>
+        <circle cx="300" cy="250" r="140" fill="#7fcf5e" opacity=".35"/>
+        <circle cx="700" cy="250" r="140" fill="#7fcf5e" opacity=".35"/>
+      </g>
+    </svg>
+    <div id="leaves"></div><div id="decos"></div>
+  </div>
+  <div class="panel">
+    <input id="nameIn" maxlength="14" placeholder="اسمك (اختياري)">
+    <input id="actIn" maxlength="48" placeholder="مثال: أساعد أخي الصغير في ترتيب ألعابه">
+    <button class="btn3d green" id="addBtn">🍃 أضف ورقتي</button>
+    <div class="ideas" id="ideas"></div>
+  </div>
+</section>
+
+<div class="ribbon" id="ribbon"><h1>🎉 أثمرت شجرةُ صفّنا!</h1><p>كلُّ ورقةٍ وعدٌ بالتعاون على الخير</p><p style="color:#a0522d">﴿ وَتَعَاوَنُوا عَلَى الْبِرِّ وَالتَّقْوَى ﴾</p><button class="btn3d blue" style="margin-top:10px;font-size:24px" onclick="this.parentNode.classList.remove('on')">أكملوا الأوراق ⬅</button></div>
+<div class="modal" id="modal"><div class="box"><div class="big" id="mTxt"></div><div class="who" id="mWho"></div><button class="btn3d green" style="font-size:24px" onclick="T.$('#modal').classList.remove('on')">حسنًا 👍</button></div></div>
+<div class="tools"><button class="ic" id="goalBtn" title="عدد التلاميذ">👥</button><button class="ic" id="resetBtn" title="شجرة جديدة">🗑️</button></div>
+
+<script src="../common.js"></script>
+<script>
+T.topbar();
+var SLOTS=[[44,33],[59,33],[52,20],[50,46],[29,33],[37,20],[50,8],[74,33],[67,20],[35,46],[65,46],[14,33],[22,20],[35,8],[65,8],[89,33],[82,20],[20,46],[80,46],[28,58],[72,58],[22,4],[78,4]];
+var IDEAS=['أساعد أمي في ترتيب المائدة','أشارك زميلي أدواتي','أساعد في تنظيف الفصل','أزور جدّي مع أسرتي','أحمل الأغراض مع أبي','أرتّب غرفتي مع إخوتي','أساعد جاري المسنّ','أشارك مجموعتي في المشروع'];
+var KEY='taawun_tree_v1', goal=20, leaves=[];
+try{ var s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s){ leaves=s.leaves||[]; goal=s.goal||20; } }catch(e){}
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify({leaves:leaves,goal:goal})); }catch(e){} }
+var ideas=T.$('#ideas');
+IDEAS.forEach(function(t){ var b=document.createElement('button'); b.textContent='💡 '+t; b.onclick=function(){ T.$('#actIn').value=t; T.$('#actIn').focus(); T.play('tick'); }; ideas.appendChild(b); });
+function slotFor(i){ if(i<SLOTS.length) return SLOTS[i]; return [12+Math.random()*76, 6+Math.random()*52]; }
+function drawLeaf(L,i,animate){
+  var p=slotFor(i), d=document.createElement('div'); d.className='leaf';
+  d.style.left=p[0]+'%'; d.style.top=p[1]+'%'; d.style.setProperty('--r',((i*37)%30-15)+'deg');
+  d.onclick=function(){ T.$('#mTxt').textContent='🍃 '+L.t; T.$('#mWho').textContent=L.n?('وعدُ: '+L.n):''; T.$('#modal').classList.add('on'); T.say(L.t); T.play('pop'); };
+  d.appendChild(document.createTextNode(L.t)); if(L.n){ var s=document.createElement('span'); s.className='nm'; s.textContent='— '+L.n; d.appendChild(s); }
+  T.$('#leaves').appendChild(d);
+  if(animate) requestAnimationFrame(function(){ requestAnimationFrame(function(){ d.classList.add('on'); }); }); else d.classList.add('on');
+}
+var DECO=[[30,8,'🌸'],[70,8,'🌸'],[16,40,'🌼'],[84,40,'🌼'],[50,60,'🌸'],[42,34,'🍎'],[60,10,'🍎'],[24,28,'🍎'],[76,28,'🍎'],[56,36,'🍊']];
+function decorate(animate){
+  var n=leaves.length, d=T.$('#decos');
+  T.$('#canopy').style.opacity=Math.min(1,n/6);
+  var want=n>=goal?DECO.length:(n>=Math.ceil(goal*.6)?5:(n>=Math.ceil(goal*.3)?2:0));
+  while(d.children.length<want){ var x=DECO[d.children.length], e=document.createElement('div'); e.className='deco'; e.style.left=x[0]+'%'; e.style.top=x[1]+'%'; e.textContent=x[2]; d.appendChild(e); (function(e){ setTimeout(function(){ e.classList.add('on'); }, animate?300:0); })(e); if(animate) T.play('grow'); }
+  T.$('#n').textContent=n; T.$('#goal').textContent=goal; T.$('#bar').style.width=Math.min(100,n/goal*100)+'%';
+  T.$('#sun').textContent=n>=goal?'🤩':n>=goal*.5?'😄':'😊';
+}
+function add(){
+  var t=T.$('#actIn').value.trim(), nm=T.$('#nameIn').value.trim();
+  if(t.length<4){ T.play('wrong'); T.restart(T.$('#actIn'),'shake'); T.$('#actIn').placeholder='اكتب عملًا تعاونيًا أولًا ✍️'; return; }
+  var L={t:t,n:nm}; leaves.push(L); save();
+  drawLeaf(L,leaves.length-1,true); T.play('grow'); T.$('#sun').classList.add('happy'); setTimeout(function(){T.$('#sun').classList.remove('happy')},700);
+  T.$('#actIn').value=''; T.$('#nameIn').value=''; T.$('#actIn').focus();
+  var before=T.$('#decos').children.length; decorate(true);
+  if(leaves.length===goal) celebrate(); else if(leaves.length%5===0) T.confetti(50);
+}
+function celebrate(){
+  T.play('fanfare'); T.confetti(260); T.$('#ribbon').classList.add('on');
+  ['🐦','🕊️','🐦'].forEach(function(b,i){ var e=document.createElement('div'); e.className='bird'; e.textContent=b; e.style.top=(5+i*7)+'%'; T.$('#wrap').appendChild(e); setTimeout(function(){ e.style.left=(30+i*18)+'%'; e.style.top=(2+i*4)+'%'; },100+i*400); });
+}
+T.$('#startBtn').onclick=function(){ T.show('grow'); T.play('whoosh'); leaves.forEach(function(L,i){ drawLeaf(L,i,false); }); decorate(false); T.$('#actIn').focus(); };
+T.$('#addBtn').onclick=add;
+T.$('#actIn').addEventListener('keydown',function(e){ if(e.key==='Enter') add(); });
+T.$('#goalBtn').onclick=function(){ var v=parseInt(prompt('كم عدد تلاميذ الصف؟',goal),10); if(v>0&&v<60){ goal=v; save(); decorate(false); } };
+T.$('#resetBtn').onclick=function(){ if(confirm('هل تريد بدء شجرة جديدة؟ ستُمحى الأوراق الحالية.')){ leaves=[]; save(); T.$('#leaves').innerHTML=''; T.$('#decos').innerHTML=''; decorate(false); } };
+</script>
+</body>
+</html>
