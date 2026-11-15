@@ -493,7 +493,10 @@ function tone(fr, d, type = 'sine', v = 0.2, when = 0) { if (!ac || muted) retur
 function chime() { [784, 988, 1175, 1568].forEach((f, i) => tone(f, 0.5, 'triangle', 0.18, i * 0.11)); }
 function chirp() { const f = 2200 + Math.random() * 900; tone(f, 0.08, 'sine', 0.05); tone(f * 1.2, 0.08, 'sine', 0.05, 0.1); }
 function step() { tone(140 + Math.random() * 40, 0.06, 'triangle', 0.05); }
-function say(text) { if (muted || !window.speechSynthesis) return; try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text.replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu, '')); u.lang = 'ar-SA'; u.rate = 0.92; const v = speechSynthesis.getVoices().find((x) => /^ar/i.test(x.lang)); if (v) u.voice = v; speechSynthesis.speak(u); } catch (e) {} }
+function fixAr(s){ s=s.replace(/[ً-ْٰ]/g,'');
+  var R=[[/(^|[^؀-ۿ])النعم(?=$|[^؀-ۿ])/g,'$1النِّعَم'],[/(^|[^؀-ۿ])نعمتين/g,'$1نِعْمَتَيْن'],[/(^|[^؀-ۿ])(ب|و|ف|ل|ك)?نعمة/g,'$1$2نِعْمَة'],[/(^|[^؀-ۿ])نعم الله/g,'$1نِعَمَ الله'],[/(^|[^؀-ۿ])نعمه(?=$|[^؀-ۿ])/g,'$1نِعَمِه']];
+  R.forEach(function(r){ s=s.replace(r[0],r[1]); }); return s; }
+function say(text) { if (muted || !window.speechSynthesis) return; try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(fixAr(text).replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu, '')); u.lang = 'ar-SA'; u.rate = 0.92; const v = speechSynthesis.getVoices().find((x) => /^ar/i.test(x.lang)); if (v) u.voice = v; speechSynthesis.speak(u); } catch (e) {} }
 $('#mute').onclick = () => { muted = !muted; $('#mute').textContent = muted ? '🔇' : '🔊'; if (master) master.gain.value = muted ? 0 : 0.8; if (muted && window.speechSynthesis) speechSynthesis.cancel(); };
 $('#fs').onclick = () => { try { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); } catch (e) {} };
 

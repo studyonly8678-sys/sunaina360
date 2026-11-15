@@ -23,9 +23,12 @@ var T = (function(){
     stamp:function(){ tone(140,.18,'square',.3,0,60); }
   };
   function play(n){ try{ S[n]&&S[n](); }catch(e){} }
+function fixAr(s){ s=s.replace(/[ً-ْٰ]/g,'');
+  var R=[[/(^|[^؀-ۿ])النعم(?=$|[^؀-ۿ])/g,'$1النِّعَم'],[/(^|[^؀-ۿ])نعمتين/g,'$1نِعْمَتَيْن'],[/(^|[^؀-ۿ])(ب|و|ف|ل|ك)?نعمة/g,'$1$2نِعْمَة'],[/(^|[^؀-ۿ])نعم الله/g,'$1نِعَمَ الله'],[/(^|[^؀-ۿ])نعمه(?=$|[^؀-ۿ])/g,'$1نِعَمِه']];
+  R.forEach(function(r){ s=s.replace(r[0],r[1]); }); return s; }
   function say(text){
     if(muted||!window.speechSynthesis) return;
-    try{ speechSynthesis.cancel(); var u=new SpeechSynthesisUtterance(text.replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu,'')); u.lang='ar-SA'; u.rate=.9;
+    try{ speechSynthesis.cancel(); var u=new SpeechSynthesisUtterance(fixAr(text).replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu,'')); u.lang='ar-SA'; u.rate=.9;
       var v=speechSynthesis.getVoices().filter(function(x){return /^ar/i.test(x.lang)})[0]; if(v) u.voice=v; speechSynthesis.speak(u); }catch(e){}
   }
   /* قصاصات */
