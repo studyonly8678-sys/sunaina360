@@ -104,7 +104,7 @@ function textSprite(text, opts = {}) {
       const x = base[i * 3], z = base[i * 3 + 2];
       p.setY(i, Math.sin(x * 0.25 + t * 1.4) * 0.18 + Math.cos(z * 0.3 + t * 1.1) * 0.15);
     }
-    p.needsUpdate = true; sg.computeVertexNormals();
+    p.needsUpdate = true;
   });
 
   // plaza
@@ -185,12 +185,23 @@ function person({ robe = 0xffffff, skin = 0xf1c79c, hair = 0x3b2414, headwear = 
   const chest = mesh(new THREE.SphereGeometry(0.31, 12, 8), robe, 0, 1.33, 0, { flatShading: false, roughness: 0.7 }); chest.scale.set(1, 0.8, 0.9); g.add(chest);
   const head = new THREE.Group(); head.position.set(0, 1.72, 0); g.add(head);
   head.add(mesh(new THREE.SphereGeometry(0.34, 16, 12), skin, 0, 0, 0, { flatShading: false, roughness: 0.6 }));
-  const eyeM = mat(0x1d1d1d, { flatShading: false });
-  [-0.12, 0.12].forEach((ex) => { const e = mesh(new THREE.SphereGeometry(0.055, 8, 6), eyeM, ex, 0.04, 0.3); e.castShadow = false; head.add(e); });
-  const smile = mesh(new THREE.TorusGeometry(0.09, 0.022, 6, 12, Math.PI), 0x9c2f2f, 0, -0.1, 0.31); smile.rotation.z = Math.PI; smile.castShadow = false; head.add(smile);
+  const eyeM = mat(0x2a1a12, { flatShading: false, roughness: 0.3 }), whiteM = mat(0xffffff, { flatShading: false, roughness: 0.4 }), browM = mat(headwear === 'hijab' ? 0x3b2414 : hair, { flatShading: false });
+  const eyes = [];
+  [-0.125, 0.125].forEach((ex) => {
+    const eg = new THREE.Group(); eg.position.set(ex, 0.05, 0.288);
+    const w = mesh(new THREE.SphereGeometry(0.085, 12, 10), whiteM); w.scale.set(0.9, 1.05, 0.5); w.castShadow = false; eg.add(w);
+    const pu = mesh(new THREE.SphereGeometry(0.05, 10, 8), eyeM, ex > 0 ? -0.008 : 0.008, -0.005, 0.03); pu.scale.z = 0.5; pu.castShadow = false; eg.add(pu);
+    const hl = mesh(new THREE.SphereGeometry(0.016, 6, 5), new THREE.MeshBasicMaterial({ color: 0xffffff }), 0.018, 0.022, 0.055); hl.castShadow = false; eg.add(hl);
+    head.add(eg); eyes.push(eg);
+    const br = mesh(new THREE.BoxGeometry(0.12, 0.024, 0.03), browM, ex, 0.175, 0.3); br.rotation.z = ex > 0 ? -0.18 : 0.18; br.castShadow = false; head.add(br);
+  });
+  const nose = mesh(new THREE.SphereGeometry(0.035, 8, 6), skin, 0, -0.025, 0.335, { flatShading: false, roughness: 0.6 }); nose.castShadow = false; head.add(nose);
+  const blinkPh = Math.random() * 5;
+  anim.push((t) => { const b = ((t + blinkPh) % 4.2) < 0.13 ? 0.12 : 1; eyes[0].scale.y = b; eyes[1].scale.y = b; });
+  const smile = mesh(new THREE.TorusGeometry(0.095, 0.024, 6, 14, Math.PI), 0x9c2f2f, 0, -0.105, 0.305); smile.rotation.z = Math.PI; smile.castShadow = false; head.add(smile);
   [-0.2, 0.2].forEach((ex) => { const c = mesh(new THREE.SphereGeometry(0.06, 8, 6), 0xff9aa2, ex, -0.06, 0.27, { flatShading: false }); c.castShadow = false; head.add(c); });
   if (headwear === 'ghutra') {
-    const gh = mesh(new THREE.SphereGeometry(0.38, 14, 10, 0, Math.PI * 2, 0, Math.PI * 0.55), 0xffffff, 0, 0.04, -0.02, { flatShading: false }); head.add(gh);
+    const gh = mesh(new THREE.SphereGeometry(0.385, 18, 10, Math.PI / 2 + 0.8, Math.PI * 2 - 1.6, 0, Math.PI * 0.62), 0xffffff, 0, 0.03, -0.02, { flatShading: false, side: THREE.DoubleSide }); head.add(mesh(new THREE.SphereGeometry(0.385, 18, 6, 0, Math.PI * 2, 0, Math.PI * 0.3), 0xffffff, 0, 0.03, -0.02, { flatShading: false })); head.add(gh);
     const back = mesh(new THREE.CylinderGeometry(0.36, 0.44, 0.6, 14, 1, true, Math.PI * 0.6, Math.PI * 0.8), 0xffffff, 0, -0.15, -0.02, { side: THREE.DoubleSide, flatShading: false }); back.rotation.y = Math.PI; head.add(back);
     const ag = mesh(new THREE.TorusGeometry(0.33, 0.045, 6, 24), 0x111111, 0, 0.17, 0); ag.rotation.x = Math.PI / 2; head.add(ag);
   } else if (headwear === 'hijab') {
@@ -578,6 +589,7 @@ function update(dt, t) {
   shadowBlob.position.x = player.position.x; shadowBlob.position.z = player.position.z;
   if (moving) { stepT -= dt * speedNow / 6.2; if (stepT <= 0) { stepT = 0.33; step(); } }
   if (marker.visible) marker.scale.setScalar(1 + Math.sin(t * 6) * 0.15);
+  updateGuide(t); drawMap(t);
   // camera
   let tx = player.position.x, tz = player.position.z;
   if (quizZ) { const want = Math.atan2(tx - quizZ.x, tz - quizZ.z); let dy = want - camYaw; dy = Math.atan2(Math.sin(dy), Math.cos(dy)); camYaw += dy * Math.min(1, dt * 3); camPitch += (0.5 - camPitch) * Math.min(1, dt * 2); tx = (tx + quizZ.x) / 2; tz = (tz + quizZ.z) / 2; }
@@ -592,16 +604,61 @@ function update(dt, t) {
   if (waveGain) waveGain.gain.value = muted ? 0 : Math.max(0, 0.5 - (player.position.z + 36) * 0.02);
   chirpT -= dt; if (chirpT < 0) { chirpT = rnd(2.5, 6); chirp(); }
 }
+// ---------------------------------------------------------------- guide arrow, minimap, adaptive quality
+const guide = new THREE.Group();
+{ const c = new THREE.Mesh(new THREE.ConeGeometry(0.42, 1.0, 4), new THREE.MeshBasicMaterial({ color: 0xffb703 })); c.rotation.x = Math.PI / 2; c.scale.z = 0.35; guide.add(c);
+  const tail = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.12, 0.7), new THREE.MeshBasicMaterial({ color: 0xffb703 })); tail.position.z = -0.75; guide.add(tail); }
+guide.visible = false; scene.add(guide);
+const zDone = (z) => z.found || z.done;
+let nearest = null;
+function updateGuide(t) {
+  let best = null, bd = 1e9; const px = player.position.x, pz = player.position.z;
+  ZONES.forEach((z) => { if (zDone(z)) return; const d = Math.hypot(z.x - px, z.z - pz); if (d < bd) { bd = d; best = z; } });
+  nearest = best; const busy = typeof quizZ !== 'undefined' && quizZ;
+  if (!best || bd < 7 || busy) { guide.visible = false; return; }
+  const a = Math.atan2(best.x - px, best.z - pz), r = 2.7 + Math.sin(t * 5) * 0.3;
+  guide.visible = true; guide.position.set(px + Math.sin(a) * r, 0.5, pz + Math.cos(a) * r); guide.rotation.y = a; guide.scale.setScalar(1.6);
+}
+const mapC = $('#map'), mg = mapC ? mapC.getContext('2d') : null; let mapTick = 0;
+function drawMap(t) {
+  if (!mg || (mapTick++ % 3)) return;
+  const S = mapC.width, c = S / 2, k = (c - 8) / 74; const X = (x) => c - x * k, Y = (z) => c - z * k;
+  mg.clearRect(0, 0, S, S); mg.save(); mg.beginPath(); mg.arc(c, c, c - 4, 0, 6.283); mg.clip();
+  mg.fillStyle = '#8fd06a'; mg.fillRect(0, 0, S, S);
+  mg.fillStyle = '#f1d9a0'; mg.fillRect(0, Y(-33), S, S); mg.fillStyle = '#2fa8dc'; mg.fillRect(0, Y(-38), S, S);
+  mg.strokeStyle = 'rgba(230,207,156,.95)'; mg.lineWidth = 4; ZONES.forEach((z) => { mg.beginPath(); mg.moveTo(c, c); mg.lineTo(X(z.x * 0.8), Y(z.z * 0.8)); mg.stroke(); });
+  mg.fillStyle = '#e9d8b4'; mg.beginPath(); mg.arc(c, c, 9 * k, 0, 6.283); mg.fill(); mg.fillStyle = '#5ec4f0'; mg.beginPath(); mg.arc(c, c, 3 * k, 0, 6.283); mg.fill();
+  ZONES.forEach((z) => {
+    const done = zDone(z); const col = done ? (z.coop === false ? '#f0545c' : '#2fbf71') : '#ffd23f';
+    if (z === nearest) { mg.strokeStyle = '#ffffff'; mg.lineWidth = 3; mg.beginPath(); mg.arc(X(z.x), Y(z.z), 11 + Math.sin(t * 5) * 3, 0, 6.283); mg.stroke(); }
+    mg.fillStyle = col; mg.strokeStyle = '#3b2f1a'; mg.lineWidth = 2; mg.beginPath(); mg.arc(X(z.x), Y(z.z), 7, 0, 6.283); mg.fill(); mg.stroke();
+    if (done) { mg.fillStyle = '#fff'; mg.font = 'bold 11px sans-serif'; mg.textAlign = 'center'; mg.textBaseline = 'middle'; mg.fillText(z.coop === false ? '✖' : '✔', X(z.x), Y(z.z) + 1); }
+  });
+  mg.translate(X(player.position.x), Y(player.position.z)); mg.rotate(-player.rotation.y);
+  mg.fillStyle = '#ffffff'; mg.strokeStyle = '#d6336c'; mg.lineWidth = 3; mg.beginPath(); mg.moveTo(0, -11); mg.lineTo(8, 8); mg.lineTo(0, 4); mg.lineTo(-8, 8); mg.closePath(); mg.fill(); mg.stroke();
+  mg.restore(); mg.strokeStyle = '#ffffff'; mg.lineWidth = 5; mg.beginPath(); mg.arc(c, c, c - 4, 0, 6.283); mg.stroke();
+}
+let qLevel = 0, qFrames = 0, qT0 = performance.now();
+function adaptQuality() {
+  qFrames++; const now = performance.now(); if (now - qT0 < 2500) return;
+  const fps = qFrames * 1000 / (now - qT0); qFrames = 0; qT0 = now;
+  if (fps < 26 && qLevel < 3) {
+    qLevel++;
+    if (qLevel === 1) renderer.setPixelRatio(1);
+    else if (qLevel === 2) { sunLight.castShadow = false; shadowBlob.material.opacity = 0.28; }
+    else { renderer.setPixelRatio(0.7); scene.fog.far = 120; }
+  }
+}
 let started = false;
 function frame() {
   const dt = Math.min(0.1, clock.getDelta()), t = clock.elapsedTime;
   anim.forEach((f) => f(t, dt));
   if (started) update(dt, t); else { camYaw += dt * 0.12; camera.position.set(Math.sin(camYaw) * 30, 16, Math.cos(camYaw) * 30 + 5); camera.lookAt(0, 2, 5); }
-  renderer.render(scene, camera); drawConf();
+  renderer.render(scene, camera); drawConf(); if (started) adaptQuality();
   requestAnimationFrame(frame);
 }
 addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
 frame();
 $('#loading').textContent = '';
 $('#go').onclick = () => { started = true; camYaw = Math.PI; $('#start').style.display = 'none'; say('هيا نتجول مع سلمان في حي التعاون'); };
-window.__game = { player, ZONES, keys, answer, closeQuiz, get done() { return doneN; }, get score() { return score; }, teleport(x, z) { player.position.set(x, 0, z); } };
+window.__game = { get q() { return qLevel; }, player, ZONES, keys, answer, closeQuiz, get done() { return doneN; }, get score() { return score; }, teleport(x, z) { player.position.set(x, 0, z); } };

@@ -40,6 +40,7 @@ canvas{display:block}
 #final button{font-family:'Lalezar';font-size:26px;border:0;border-radius:18px;padding:8px 26px;background:#2b8cee;color:#fff;box-shadow:0 6px 0 #1a5fa8;cursor:pointer;margin-top:8px}
 @keyframes pop{0%{transform:scale(.3)}100%{transform:scale(1)}}
 #conf{position:fixed;inset:0;pointer-events:none;z-index:16}
+#map{position:fixed;top:12px;right:12px;width:clamp(96px,13vw,160px);height:clamp(96px,13vw,160px);z-index:11;pointer-events:none;border-radius:50%;box-shadow:0 5px 14px rgba(0,0,0,.3)}
 </style>
 <script type="importmap">{"imports":{"three":"../vendor/three.module.min.js"}}</script>
 </head>
@@ -53,9 +54,10 @@ canvas{display:block}
 </div>
 <div class="ui top"><div class="pill title">🌍 رحلة في عالم النعم</div><div class="pill">💚 النعم المكتشفة: <b id="cnt">0</b> / <b id="tot">8</b></div></div>
 <div class="btns"><button class="ic" id="fs" title="ملء الشاشة">⛶</button></div>
-<div class="ui hint"><span>حرّك سلمان بالأسهم، أو اضغط على الأرض ليمشي إليها 👣</span></div>
+<div class="ui hint"><span>اتبع السهم الأصفر ➤ حرّك سلمان بالأسهم، أو اضغط على الأرض ليمشي إليها 👣</span></div>
 <div id="card"><h2 id="cT"></h2><p id="cP"></p><small>نقول معًا: الحمد لله 🤲</small></div>
 <div id="joy"><i></i></div>
+<canvas id="map" width="300" height="300"></canvas>
 <div id="final"><div><h2>✨ ما شاء الله! اكتشفتم النعم كلها</h2><p>﴿ وَإِن تَعُدُّوا نِعْمَةَ اللَّهِ لَا تُحْصُوهَا ﴾</p><p style="color:#d6336c">الحمد لله… نُحبّ الله الذي أعطانا كل هذه النعم 💚</p><button onclick="document.getElementById('final').style.display='none'">أكمل التجوّل 👣</button></div></div>
 <canvas id="conf"></canvas>
 <script type="module" src="world.js"></script>

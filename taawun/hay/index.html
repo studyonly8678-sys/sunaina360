@@ -40,6 +40,7 @@ canvas{display:block}
 #final button{font-family:'Lalezar';font-size:26px;border:0;border-radius:18px;padding:8px 26px;background:#2b8cee;color:#fff;box-shadow:0 6px 0 #1a5fa8;cursor:pointer;margin-top:8px}
 @keyframes pop{0%{transform:scale(.3)}100%{transform:scale(1)}}
 #conf{position:fixed;inset:0;pointer-events:none;z-index:16}
+#map{position:fixed;top:12px;right:12px;width:clamp(96px,13vw,160px);height:clamp(96px,13vw,160px);z-index:11;pointer-events:none;border-radius:50%;box-shadow:0 5px 14px rgba(0,0,0,.3)}
 #quiz{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(140%);z-index:12;background:#fffdf3;border:6px solid #9b5de5;border-radius:28px;padding:12px 26px 16px;text-align:center;width:min(760px,94vw);box-shadow:0 14px 40px rgba(0,0,0,.3);transition:transform .45s cubic-bezier(.3,1.4,.5,1)}
 #quiz.on{transform:translateX(-50%) translateY(0)}
 #quiz.shake{animation:shk .5s}
@@ -72,9 +73,10 @@ canvas{display:block}
 </div>
 <div class="ui top"><div class="pill title">🏘️ جولة في حيّ التعاون</div><div class="pill">🔍 المواقف: <b id="cnt">0</b> / <b id="tot">8</b></div></div>
 <div class="btns"><button class="ic" id="fs" title="ملء الشاشة">⛶</button></div>
-<div class="ui hint"><span>امشِ إلى الدوائر الصفراء 🔍 حرّك سلمان بالأسهم، أو اضغط على الأرض ليمشي إليها</span></div>
+<div class="ui hint"><span>اتبع السهم الأصفر ➤ إلى الدوائر الصفراء 🔍 بالأسهم، أو اضغط على الأرض</span></div>
 <div id="quiz"><div id="qN"></div><h2 id="qT"></h2><div id="qBtns"><button id="yes">🤝 سلوك تعاوني</button><button id="no">🚫 غير تعاوني</button></div><p id="qWhy"></p><button id="qNext">أكمل الجولة 👣</button></div>
 <div id="joy"><i></i></div>
+<canvas id="map" width="300" height="300"></canvas>
 <div id="final"><div><h2>🏆 أنهيتم جولة حيّ التعاون!</h2><p id="fScore"></p><p style="color:#0b5e40">﴿ وَتَعَاوَنُوا عَلَى الْبِرِّ وَالتَّقْوَى وَلَا تَعَاوَنُوا عَلَى الْإِثْمِ وَالْعُدْوَانِ ﴾</p><button onclick="document.getElementById('final').style.display='none'">أكمل التجوّل 👣</button></div></div>
 <canvas id="conf"></canvas>
 <script type="module" src="world.js"></script>
