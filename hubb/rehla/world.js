@@ -194,7 +194,7 @@ function person({ robe = 0xffffff, skin = 0xf1c79c, hair = 0x3b2414, headwear = 
     const back = mesh(new THREE.CylinderGeometry(0.36, 0.44, 0.6, 14, 1, true, Math.PI * 0.6, Math.PI * 0.8), 0xffffff, 0, -0.15, -0.02, { side: THREE.DoubleSide, flatShading: false }); back.rotation.y = Math.PI; head.add(back);
     const ag = mesh(new THREE.TorusGeometry(0.33, 0.045, 6, 24), 0x111111, 0, 0.17, 0); ag.rotation.x = Math.PI / 2; head.add(ag);
   } else if (headwear === 'hijab') {
-    const hj = mesh(new THREE.SphereGeometry(0.4, 16, 12, 0, Math.PI * 2, 0, Math.PI * 0.62), hair, 0, 0.02, -0.03, { flatShading: false }); head.add(hj);
+    const hj = mesh(new THREE.SphereGeometry(0.4, 18, 12, Math.PI / 2 + 0.75, Math.PI * 2 - 1.5, 0, Math.PI * 0.72), hair, 0, 0.02, -0.03, { flatShading: false, side: THREE.DoubleSide }); head.add(hj);
     const nk = mesh(new THREE.CylinderGeometry(0.33, 0.42, 0.45, 14, 1, true, Math.PI * 0.62, Math.PI * 0.76), hair, 0, -0.22, 0, { side: THREE.DoubleSide, flatShading: false }); nk.rotation.y = Math.PI; head.add(nk);
   } else {
     for (let i = 0; i < 22; i++) {
