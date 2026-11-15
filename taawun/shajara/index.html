@@ -19,11 +19,11 @@ body{background:linear-gradient(#8fd8ff,#dff5ff 60%,#c8eeb0 60%,#8fcf6a);overflo
 .meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#9be36c,#2f9e44);transition:width .6s}
 .treeWrap{position:relative;width:min(1050px,98vw);flex:1;max-height:calc(100vh - 210px)}
 .treeWrap svg{position:absolute;inset:0;width:100%;height:100%}
-.leaf{position:absolute;width:12.5%;min-height:8%;transform:translate(-50%,-50%) scale(0);background:linear-gradient(135deg,#7fd65b,#2f9e44);color:#fff;border-radius:0 70% 0 70%;padding:8px 12px;font-size:clamp(11px,1.25vw,16px);font-weight:900;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.25;box-shadow:0 4px 0 rgba(0,0,0,.12);cursor:pointer;transition:transform .7s cubic-bezier(.3,1.6,.5,1);text-shadow:0 1px 2px rgba(0,0,0,.3)}
+.leaf{position:absolute;width:13%;min-height:8%;transform:translate(-50%,-50%) scale(0);background:linear-gradient(135deg,#7fd65b,#2f9e44);color:#fff;border-radius:0 70% 0 70%;padding:6px 14px;font-size:clamp(10px,1.1vw,15px);font-weight:900;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.2;flex-direction:column;box-shadow:0 4px 0 rgba(0,0,0,.12);cursor:pointer;transition:transform .7s cubic-bezier(.3,1.6,.5,1);text-shadow:0 1px 2px rgba(0,0,0,.3)}
 .leaf.on{transform:translate(-50%,-50%) scale(1) rotate(var(--r,0deg))}
 .leaf:nth-child(3n){background:linear-gradient(135deg,#a6e36a,#4caf50)}
 .leaf:nth-child(4n){background:linear-gradient(135deg,#5bc98a,#1f8f5a)}
-.leaf .nm{display:block;font-size:.8em;opacity:.9}
+.leaf .nm{display:block;font-size:.78em;opacity:.9;font-weight:700}
 .deco{position:absolute;font-size:clamp(22px,3vw,40px);transform:translate(-50%,-50%) scale(0);transition:transform .8s cubic-bezier(.3,1.6,.5,1);pointer-events:none}
 .deco.on{transform:translate(-50%,-50%) scale(1)}
 .bird{position:absolute;font-size:44px;top:8%;left:-10%;transition:left 4s ease-out,top 4s ease-out}
@@ -106,9 +106,9 @@ IDEAS.forEach(function(t){ var b=document.createElement('button'); b.textContent
 function slotFor(i){ if(i<SLOTS.length) return SLOTS[i]; return [12+Math.random()*76, 6+Math.random()*52]; }
 function drawLeaf(L,i,animate){
   var p=slotFor(i), d=document.createElement('div'); d.className='leaf';
-  d.style.left=p[0]+'%'; d.style.top=p[1]+'%'; d.style.setProperty('--r',((i*37)%30-15)+'deg');
+  d.style.left=p[0]+'%'; d.style.top=p[1]+'%'; d.style.setProperty('--r',((i*37)%14-7)+'deg');
   d.onclick=function(){ T.$('#mTxt').textContent='🍃 '+L.t; T.$('#mWho').textContent=L.n?('وعدُ: '+L.n):''; T.$('#modal').classList.add('on'); T.say(L.t); T.play('pop'); };
-  d.appendChild(document.createTextNode(L.t)); if(L.n){ var s=document.createElement('span'); s.className='nm'; s.textContent='— '+L.n; d.appendChild(s); }
+  d.appendChild(document.createTextNode(L.t)); if(L.n){ var s=document.createElement('span'); s.className='nm'; s.textContent='✍️ '+L.n; d.appendChild(s); }
   T.$('#leaves').appendChild(d);
   if(animate) requestAnimationFrame(function(){ requestAnimationFrame(function(){ d.classList.add('on'); }); }); else d.classList.add('on');
 }
