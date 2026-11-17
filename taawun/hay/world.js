@@ -238,7 +238,7 @@ function building(x, z, w, d, h, color, rotY = 0) {
 // ---------------------------------------------------------------- situations (cooperation)
 const ZONES = [
   { id: 'table', x: -24, z: 30, coop: true, title: 'يساعد أمه في ترتيب المائدة', why: 'يعمل مع أمه، ويؤدي دوره في عمل خير… فهذا تعاون.' },
-  { id: 'sweep', x: 36, z: 25, coop: false, title: 'يلعب بينما زملاؤه ينظّفون الساحة', why: 'تركهم يتعبون وحدهم ولم يؤدِّ دوره… فليس هذا تعاونًا.' },
+  { id: 'sweep', x: 36, z: 25, coop: false, title: 'يجلس متفرّجًا بينما زملاؤه ينظّفون الساحة', why: 'تركهم يتعبون وحدهم ولم يؤدِّ دوره… فليس هذا تعاونًا.' },
   { id: 'carry', x: 16, z: 36, coop: true, title: 'يحملان الطاولة معًا', why: 'يعملان معًا، وكل واحد يحمل من جهة… فهذا تعاون.' },
   { id: 'neighbor', x: -38, z: -12, coop: true, title: 'يحملان أغراض الجار المسنّ', why: 'يساعدان جارهما في عمل خير… والجار له حق علينا.' },
   { id: 'beach', x: 0, z: -31, coop: true, title: 'ينظّفون الشاطئ معًا', why: 'يعملون معًا لخير الناس جميعًا… فهذا تعاون محمود.' },
@@ -287,7 +287,7 @@ function holdArms(p, x = -1.1) { p.userData.parts.arms.forEach((a) => { a.rotati
   const plate = mesh(new THREE.CylinderGeometry(0.25, 0.22, 0.05, 14), 0xffffff, 0, 0, 0, { flatShading: false }); scene.add(plate);
   anim.push((t) => { const k = (Math.sin(t * 1.2) + 1) / 2; kid.position.x = zx - 2.6 + k * 0.7; plate.position.set(kid.position.x + 0.55, 1.35 + Math.sin(t * 2.4) * 0.03, zz - 0.2); });
 }
-// 2) school yard: two sweep, one plays (not cooperative)
+// 2) school yard: two sweep, one sits watching (not cooperative)
 {
   const zx = 36, zz = 25;
   [[-1.5, 0.5], [1.4, -0.8]].forEach(([dx, dz], i) => {
@@ -298,10 +298,7 @@ function holdArms(p, x = -1.1) { p.userData.parts.arms.forEach((a) => { a.rotati
   for (let i = 0; i < 7; i++) { const leaf = mesh(new THREE.BoxGeometry(0.25, 0.02, 0.15), 0xd4a373, zx + rnd(-3, 3), 0.03, zz + rnd(-2, 2)); leaf.castShadow = false; scene.add(leaf); }
   const bench = new THREE.Group(); bench.add(mesh(new THREE.BoxGeometry(2, 0.12, 0.6), 0x9a6b3f, 0, 0.55, 0)); bench.add(mesh(new THREE.BoxGeometry(0.12, 0.55, 0.5), 0x6e4426, -0.85, 0.27, 0)); bench.add(mesh(new THREE.BoxGeometry(0.12, 0.55, 0.5), 0x6e4426, 0.85, 0.27, 0));
   bench.position.set(zx + 2.5, 0, zz + 3); scene.add(bench); block(zx + 2.5, zz + 3, 1.1);
-  const lazy = person(KID); lazy.position.set(zx + 2.5, 0.25, zz + 3); lazy.rotation.y = -2.6; lazy.scale.setScalar(0.85); scene.add(lazy); holdArms(lazy, -1.3);
-  const pad = mesh(new THREE.BoxGeometry(0.45, 0.08, 0.25), 0x222222); scene.add(pad);
-  const lp = new THREE.Vector3(); anim.push((t) => { lazy.getWorldPosition(lp); pad.position.set(lp.x + Math.sin(-2.6) * 0.45, 1.15 + Math.sin(t * 8) * 0.02, lp.z + Math.cos(-2.6) * 0.45); pad.rotation.y = -2.6; lazy.userData.parts.head.rotation.x = 0.35; });
-  scene.add(mesh(new THREE.SphereGeometry(0.06, 6, 4), 0x4cc9f0)); // spark
+  const lazy = person(KID); lazy.position.set(zx + 2.5, 0.25, zz + 3); lazy.rotation.y = -2.6; lazy.scale.setScalar(0.85); scene.add(lazy); holdArms(lazy, -0.15);
 }
 // 3) school: two boys carrying a table together (cooperative)
 {

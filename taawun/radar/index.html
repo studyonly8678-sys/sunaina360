@@ -29,7 +29,7 @@ body{background:radial-gradient(circle at 50% 40%,#1b3a6b,#0b1730 70%);overflow:
 .bulbs .on{filter:drop-shadow(0 0 10px #ffd23f)}
 .bulbs .off{filter:grayscale(1) brightness(1.6);opacity:.45}
 .pic{width:100%;height:27vh;border-radius:18px;overflow:hidden;margin:1.2vh 0;background:#eef6fd}
-.pic img{width:100%;height:100%;object-fit:cover}
+.pic img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
 .qtext{font-size:3.3vh;font-weight:900;line-height:1.5;margin-bottom:1.6vh}
 .opts{display:flex;flex-direction:column;gap:1.2vh}
 .opts.tf{flex-direction:row;justify-content:center;gap:2vw}
@@ -92,11 +92,11 @@ body{background:radial-gradient(circle at 50% 40%,#1b3a6b,#0b1730 70%);overflow:
 T.topbar();
 var Q=[
  {k:'tf',img:'a1',q:'مساعدة الأخ في ترتيب ألعابه سلوك تعاوني.',a:1,why:'صحيح! لأنه يعمل مع أخيه في عمل خير 🤝'},
- {k:'tf',img:'a2',q:'أكل الحلوى وحدي ورفض مشاركة إخوتي سلوك تعاوني.',a:0,why:'صحيح! هذا ليس تعاونًا؛ لأنه لم يشارك إخوته، ففيه أنانية.'},
+ {k:'tf',img:'books',q:'المرور بجانب زميلي الذي سقطت كتبه دون أن أساعده سلوك تعاوني.',a:0,why:'صحيح! هذا ليس تعاونًا؛ فالمتعاون يسارع إلى مساعدة زميله 🤝'},
  {k:'mcq',img:'a4',q:'أيّ هذه السلوكيات تعاوني؟',o:['حمل حقيبته فقط وترك سلّة المجموعة لغيره','قسّمت المجموعة الأدوات وأتقن كل واحد دوره','رفض أن يشارك أدواته مع زملائه'],a:1,why:'أحسنتم! عملوا معًا وأدّى كل واحد دوره بإتقان 🌟'},
  {k:'mcq',img:'q4_hide',q:'ساعد صديقه على إخفاء لعبة أخذها من زميله دون إذن. هذا السلوك:',o:['تعاون محمود لأنه ساعد صديقه','تعاون على الإثم نهانا الله عنه','سلوك ليس فيه خطأ'],a:1,why:'رائع! هذا تعاون على الإثم، والله يقول: ﴿وَلَا تَعَاوَنُوا عَلَى الْإِثْمِ وَالْعُدْوَانِ﴾'}
 ];
-var HINT=['🚨 انتبهوا! هل يعمل الولد مع أخيه في شيء نافع؟','🚨 انتبهوا! هل شارك إخوته أم أكل وحده؟','🚨 انتبهوا! في التعاون نعمل معًا ويؤدي كل واحد دوره.','🚨 انتبهوا! هل التعاون يكون على الخير أم على الخطأ؟'];
+var HINT=['🚨 انتبهوا! هل يعمل الولد مع أخيه في شيء نافع؟','🚨 انتبهوا! هل ساعد زميله أم تركه وحده؟','🚨 انتبهوا! في التعاون نعمل معًا ويؤدي كل واحد دوره.','🚨 انتبهوا! هل التعاون يكون على الخير أم على الخطأ؟'];
 var k=0,score=0,tries=0,busy=false;
 function bulbs(){ var h=''; for(var i=0;i<Q.length;i++) h+='<span class="'+(i<k?'on':'off')+'">💡</span>'; T.$('#bulbs').innerHTML=h; }
 function blips(){ document.querySelectorAll('#radar .blip').forEach(function(b,i){ b.className='blip'+(i<k?' done':i===k?' cur':''); }); }
