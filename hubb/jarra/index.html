@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>جرّة الحمد – أحب الله تعالى</title>
+<link rel="stylesheet" href="../common.css">
+<style>
+body{background:radial-gradient(circle at 30% 20%,#fff6e0,#ffe2b8 45%,#f7c98b);overflow:hidden}
+.lantern{position:fixed;top:0;font-size:7vh;transform-origin:50% 0;animation:swing 3.4s ease-in-out infinite}
+@keyframes swing{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+.sparkle{position:fixed;font-size:3vh;opacity:.7;animation:tw 2.4s ease-in-out infinite}
+@keyframes tw{50%{opacity:.15;transform:scale(.7)}}
+#play{flex-direction:row;gap:4vw;padding:0 4vw}
+/* الجرّة */
+.jarWrap{position:relative;width:min(44vh,34vw);flex:none}
+.jarWrap svg{width:100%;overflow:visible}
+.jarWrap .label{position:absolute;left:0;right:0;bottom:7%;text-align:center;font-family:'Lalezar';font-size:3.6vh;color:#8a5a00;text-shadow:0 2px 0 #fff}
+.heart{position:absolute;font-size:7vh;transform:translate(-50%,-50%);filter:drop-shadow(0 3px 3px rgba(0,0,0,.2))}
+.heart.land{animation:pop .5s cubic-bezier(.2,1.6,.4,1)}
+.jarWrap.full svg .glass{filter:drop-shadow(0 0 22px #ffd23f) drop-shadow(0 0 40px #ff8fab)}
+.flyer{position:fixed;font-size:7vh;z-index:40;pointer-events:none}
+.counter{text-align:center;font-family:'Lalezar';font-size:4vh;color:#c2185b;margin-top:1vh}
+/* السؤال */
+.qcard{background:#fff;border-radius:30px;padding:2.6vh 2.6vw;width:min(760px,50vw);box-shadow:0 10px 0 #f0b77a,0 20px 44px rgba(0,0,0,.18);text-align:center;position:relative}
+.qcard .top{display:flex;justify-content:space-between;align-items:center;font-family:'Lalezar';font-size:2.8vh;color:#c2185b}
+.qtext{font-size:4vh;font-weight:900;line-height:1.5;margin:2vh 0}
+.opts{display:flex;flex-direction:column;gap:1.4vh}
+.opts.tf{flex-direction:row;justify-content:center;gap:2vw}
+.opt{font-family:'Lalezar';font-size:3.6vh;padding:1.2vh 2vw;border-radius:20px;background:#fff7ec;color:#22313f;box-shadow:0 6px 0 #f0c89a,0 0 0 3px #f0c89a inset;transition:transform .15s}
+.opt:hover{transform:translateY(-4px)}
+.opts.tf .opt{min-width:14vw;color:#fff}
+.opt.t{background:#2fbf71;box-shadow:0 7px 0 #1d8a4f}.opt.f{background:#f0545c;box-shadow:0 7px 0 #b9343b}
+.opt.ok{outline:6px solid #ffd23f}
+.opt.no{opacity:.45;animation:shake .5s}
+.why{min-height:5vh;margin-top:1.6vh;font-size:2.7vh;font-weight:700;color:#8a5a00;opacity:0;transition:opacity .3s;line-height:1.6}
+.why.on{opacity:1}
+.hamd{position:absolute;top:-6vh;left:50%;transform:translateX(-50%);font-family:'Lalezar';font-size:5vh;color:#2f8a3a;background:#fff;border-radius:20px;padding:0 20px;box-shadow:0 6px 14px rgba(0,0,0,.15);opacity:0;white-space:nowrap}
+.hamd.go{animation:hamd 1.6s ease-out}
+@keyframes hamd{0%{opacity:0;transform:translate(-50%,10px) scale(.6)}20%{opacity:1;transform:translate(-50%,0) scale(1.1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-20px)}}
+#nextBtn{display:none;margin-top:1vh}
+.kid{position:fixed;right:2vw;bottom:2vh;width:16vh;animation:bob 2.6s ease-in-out infinite;filter:drop-shadow(0 6px 6px rgba(0,0,0,.2))}
+#intro .title{font-size:11vh;color:#c2185b;text-shadow:0 5px 0 #fff,0 10px 20px rgba(0,0,0,.15)}
+#intro .sub{font-size:3.4vh;font-weight:900;color:#5a3200;margin:1vh 0 3vh;text-align:center;max-width:900px;line-height:1.6}
+#end .cert h1{color:#c2185b}
+.verse{font-size:3vh;line-height:1.8;background:#fff2f6;border-radius:18px;padding:10px 18px;margin:10px 0;font-weight:700}
+</style>
+</head>
+<body>
+<div class="lantern" style="right:8vw">🏮</div><div class="lantern" style="left:10vw;animation-delay:-1.4s">🏮</div>
+<div class="sparkle" style="top:20vh;left:22vw">✨</div><div class="sparkle" style="top:70vh;left:6vw;animation-delay:-.8s">✨</div><div class="sparkle" style="top:12vh;right:30vw;animation-delay:-1.6s">✨</div>
+
+<section class="screen on" id="intro">
+  <h1 class="title">🫙 جرّة الحمد</h1>
+  <p class="sub">نِعَمُ الله علينا كثيرة… وكلما أجبنا إجابة صحيحة عن <b>نِعَم الله</b> يسقط قلبٌ في الجرّة ونقول: <b style="color:#2f8a3a">الحمد لله</b> 💖 هل نملأ الجرّة بأربعة قلوب؟</p>
+  <button class="btn3d gold" id="startBtn">💖 نبدأ</button>
+</section>
+
+<section class="screen" id="play">
+  <div>
+    <div class="jarWrap" id="jar">
+      <svg viewBox="0 0 300 380">
+        <rect x="95" y="8" width="110" height="34" rx="10" fill="#ffb703" stroke="#c98700" stroke-width="5"/>
+        <rect x="88" y="38" width="124" height="14" rx="6" fill="#e05a7a"/>
+        <path class="glass" d="M100 52 C100 80 40 90 40 140 V330 Q40 370 80 370 H220 Q260 370 260 330 V140 C260 90 200 80 200 52Z" fill="rgba(220,240,255,.55)" stroke="#9cc7e6" stroke-width="7"/>
+        <path d="M62 150 V320" stroke="#fff" stroke-width="10" stroke-linecap="round" opacity=".7"/>
+      </svg>
+      <div id="hearts"></div>
+      <div class="label">الحمد لله</div>
+    </div>
+    <div class="counter" id="counter">💖 0 من 4</div>
+  </div>
+  <div class="qcard" id="qcard">
+    <div class="hamd" id="hamd">الحمد لله 🤲</div>
+    <div class="top"><span id="qn">السؤال 1 من 4</span><span>🫙</span></div>
+    <div class="qtext" id="qt"></div>
+    <div class="opts" id="opts"></div>
+    <div class="why" id="why"></div>
+    <button class="btn3d gold" id="nextBtn">السؤال التالي ⬅</button>
+  </div>
+  <img class="kid" src="../img/st5.png" alt="">
+</section>
+
+<section class="screen" id="end">
+  <div class="cert">
+    <h1>💖 امتلأت جرّة الحمد! 💖</h1>
+    <p id="endTxt"></p>
+    <div class="verse">قال الله تعالى: ﴿وَإِن تَعُدُّوا نِعْمَةَ اللَّهِ لَا تُحْصُوهَا﴾<br>العقل • الصحة • الرزق • التوفيق… فالحمد لله على نِعَمِه 🤲</div>
+    <button class="btn3d blue" onclick="location.reload()" style="margin-top:8px">↺ نلعب مرة أخرى</button>
+  </div>
+</section>
+
+<script src="../common.js"></script>
+<script>
+T.topbar();
+var Q=[
+ {k:'tf',q:'العقل نعمة من نعم الله تعالى.',a:1,hint:'🤔 بماذا نفكّر ونتعلّم؟ مَن وهبنا إياه؟',why:'صحيح! العقل نعمة عظيمة؛ به نفكّر ونتعلّم 🧠'},
+ {k:'tf',q:'نستطيع أن نعدّ نعم الله تعالى كلها.',a:0,hint:'🤔 تذكّروا الآية: ﴿وَإِن تَعُدُّوا نِعْمَةَ اللَّهِ لَا تُحْصُوهَا﴾',why:'صحيح! نِعَم الله كثيرة لا نستطيع عدّها ﴿لَا تُحْصُوهَا﴾ ✨'},
+ {k:'mcq',q:'الذي يشفيني من المرض هو:',o:['الدواء وحده','الله تعالى','الطبيب وحده'],a:1,hint:'🤔 الدواء والطبيب أسباب… فمن الشافي؟',why:'أحسنتم! الله تعالى هو الشافي، والدواء والطبيب أسباب 💚'},
+ {k:'mcq',q:'أيّ هذه ليست من نعم الله في درسنا؟',o:['الرزق','الصحة','الكسل'],a:2,hint:'🤔 أيّها لا ينفعنا؟',why:'رائع! الكسل ليس نعمة، أمّا الرزق والصحة فمن نِعَم الله 🎁'}
+];
+var SLOTS=[[33,68],[67,68],[50,50],[50,32]];
+var k=0,score=0,tries=0,busy=false;
+function start(){ k=0; score=0; T.$('#hearts').innerHTML=''; T.$('#jar').classList.remove('full'); T.show('play'); load(); }
+function load(){
+  busy=false; tries=0; var q=Q[k], o=T.$('#opts'); o.innerHTML=''; o.className='opts'+(q.k==='tf'?' tf':'');
+  T.$('#qn').textContent='السؤال '+(k+1)+' من '+Q.length; T.$('#counter').textContent='💖 '+k+' من '+Q.length;
+  T.$('#qt').textContent=q.q; T.$('#why').classList.remove('on'); T.$('#nextBtn').style.display='none';
+  var list = q.k==='tf' ? [['✔ صح',1,'t'],['✖ خطأ',0,'f']] : q.o.map(function(t,i){return [t,i,''];});
+  list.forEach(function(it){ var b=document.createElement('button'); b.className='opt '+it[2]; b.textContent=it[0]; b.onclick=function(){ pick(b,it[1]); }; o.appendChild(b); });
+  T.restart(T.$('#qcard'),'pop'); T.play('whoosh');
+}
+function pick(b,v){
+  if(busy) return; var q=Q[k], w=T.$('#why');
+  if(v===q.a){
+    busy=true; if(tries===0) score++; b.classList.add('ok'); T.play('correct');
+    w.textContent=q.why; w.classList.add('on'); T.restart(T.$('#hamd'),'go');
+    fly(b,k); k++;
+    setTimeout(function(){ T.$('#nextBtn').style.display='inline-block'; T.$('#nextBtn').textContent=k<Q.length?'السؤال التالي ⬅':'💖 شاهدوا الجرّة'; },1300);
+  }else{
+    tries++; b.classList.add('no'); T.play('wrong'); w.textContent=q.hint; w.classList.add('on');
+  }
+}
+function fly(from,i){
+  var jar=T.$('#jar'), jr=jar.getBoundingClientRect(), fr=from.getBoundingClientRect();
+  var tx=jr.left+jr.width*SLOTS[i][0]/100, ty=jr.top+jr.height*SLOTS[i][1]/100;
+  var f=document.createElement('div'); f.className='flyer'; f.textContent='💖'; document.body.appendChild(f);
+  var sx=fr.left+fr.width/2, sy=fr.top;
+  var anim=f.animate([
+    {transform:'translate('+(sx-30)+'px,'+(sy-30)+'px) scale(.6)'},
+    {transform:'translate('+((sx+tx)/2-30)+'px,'+(Math.min(sy,ty)-160)+'px) scale(1.3) rotate(-20deg)'},
+    {transform:'translate('+(tx-30)+'px,'+(ty-30)+'px) scale(1)'}
+  ],{duration:1000,easing:'cubic-bezier(.4,0,.3,1)'});
+  anim.onfinish=function(){ f.remove();
+    var h=document.createElement('div'); h.className='heart land'; h.textContent='💖'; h.style.left=SLOTS[i][0]+'%'; h.style.top=SLOTS[i][1]+'%'; T.$('#hearts').appendChild(h);
+    T.play('coin'); T.confetti(40); T.$('#counter').textContent='💖 '+(i+1)+' من '+Q.length;
+    if(i===Q.length-1){ jar.classList.add('full'); T.play('grow'); }
+  };
+}
+function next(){ if(k<Q.length) load(); else end(); }
+function end(){ T.show('end'); T.play('fanfare'); T.confetti(240); T.$('#endTxt').textContent='ملأنا الجرّة بـ '+Q.length+' قلوب، وأجبنا '+score+' إجابات صحيحة من المحاولة الأولى 🫙'; }
+T.$('#startBtn').onclick=start; T.$('#nextBtn').onclick=next;
+document.addEventListener('keydown',function(e){ if(e.key==='Enter'&&T.$('#nextBtn').style.display!=='none') next(); });
+window.__game={Q:Q,pick:function(i){ var bs=document.querySelectorAll('#opts .opt'); var q=Q[k]; bs[q.k==='tf'?(i?0:1):i].click(); },next:next,start:start};
+</script>
+</body>
+</html>

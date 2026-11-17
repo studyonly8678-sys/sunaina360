@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>حديقة الصف التعاونية – التعاون</title>
+<link rel="stylesheet" href="../common.css">
+<style>
+body{background:linear-gradient(#8fd8ff 0%,#d9f4ff 52%,#9fdc6f 52%,#6fbf45 100%);overflow:hidden}
+.sun{position:fixed;top:4vh;right:6vw;width:13vh;height:13vh;border-radius:50%;background:radial-gradient(#fff6b0,#ffd23f 60%,#ffb703);box-shadow:0 0 60px 20px rgba(255,210,63,.55);animation:sunPulse 4s ease-in-out infinite}
+@keyframes sunPulse{50%{transform:scale(1.07)}}
+.cloud{position:fixed;font-size:9vh;opacity:.95;animation:drift 38s linear infinite}
+@keyframes drift{from{transform:translateX(-30vw)}to{transform:translateX(130vw)}}
+.school{position:fixed;left:5vw;bottom:44vh;width:24vh}
+/* الأرض والأحواض */
+.beds{position:fixed;left:0;right:0;bottom:6vh;display:flex;justify-content:center;gap:5vw;z-index:3}
+.bed{position:relative;width:15vw;max-width:220px;height:30vh;display:flex;align-items:flex-end;justify-content:center}
+.soil{position:absolute;bottom:0;width:100%;height:5.5vh;border-radius:50%;background:radial-gradient(#8a5a35,#5e3a1e);box-shadow:inset 0 -6px 0 rgba(0,0,0,.2)}
+.bed .tag{position:absolute;bottom:-4.6vh;font-family:'Lalezar';font-size:2.6vh;color:#fff;background:#5e3a1e;border-radius:10px;padding:0 12px}
+.plant{position:absolute;bottom:2.2vh;width:100%;height:27vh;transform-origin:50% 100%;transform:scaleY(0);transition:transform 1.4s cubic-bezier(.3,1.5,.5,1)}
+.bed.grown .plant{transform:scaleY(1)}
+.plant svg{width:100%;height:100%;overflow:visible}
+.bud{transform-origin:50% 50%;transform:scale(0);transition:transform .8s cubic-bezier(.3,1.8,.5,1) 1.1s}
+.bed.grown .bud{transform:scale(1)}
+.can{position:absolute;bottom:20vh;font-size:9vh;opacity:0;pointer-events:none;z-index:6}
+.can.go{animation:water 1.4s ease-in-out}
+@keyframes water{0%{opacity:0;transform:translate(60px,-40px) rotate(0)}25%{opacity:1;transform:translate(0,0) rotate(-35deg)}75%{opacity:1;transform:translate(0,0) rotate(-35deg)}100%{opacity:0;transform:translate(-40px,-30px) rotate(0)}}
+.drop{position:absolute;width:10px;height:16px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#4fc3f7;z-index:5;animation:fall .8s ease-in forwards}
+@keyframes fall{to{transform:translateY(16vh);opacity:0}}
+.bfly{position:fixed;font-size:5vh;z-index:7;pointer-events:none;animation:fly 7s ease-in-out infinite}
+@keyframes fly{0%{transform:translate(0,0) rotate(-8deg)}25%{transform:translate(8vw,-6vh) rotate(8deg)}50%{transform:translate(2vw,-12vh) rotate(-6deg)}75%{transform:translate(-6vw,-4vh) rotate(10deg)}100%{transform:translate(0,0) rotate(-8deg)}}
+/* بطاقة السؤال */
+#play{justify-content:flex-start;padding-top:3vh}
+.qcard{background:rgba(255,255,255,.96);border-radius:28px;padding:2.2vh 3vw 2.6vh;width:min(1050px,92vw);box-shadow:0 10px 0 #cbe7b5,0 18px 40px rgba(0,0,0,.18);text-align:center;position:relative;z-index:8}
+.qnum{font-family:'Lalezar';font-size:2.8vh;color:#2f8a3a;display:flex;justify-content:space-between;align-items:center}
+.qnum .flw{font-size:3.4vh;letter-spacing:4px}
+.qtext{font-size:4vh;font-weight:900;margin:1.2vh 0 2vh;line-height:1.5;color:#22313f}
+.opts{display:flex;gap:2vw;justify-content:center;flex-wrap:wrap}
+.opt{font-family:'Lalezar';font-size:3.6vh;min-width:16vw;padding:1.2vh 2.4vw;border-radius:20px;color:#22313f;background:#fff;box-shadow:0 7px 0 #b8d8a0,0 0 0 3px #b8d8a0 inset;transition:transform .15s}
+.opt:hover{transform:translateY(-4px)}
+.opt.t{background:#2fbf71;color:#fff;box-shadow:0 7px 0 #1d8a4f}
+.opt.f{background:#f0545c;color:#fff;box-shadow:0 7px 0 #b9343b}
+.opt.ok{outline:6px solid #ffd23f}
+.opt.no{opacity:.45;animation:shake .5s}
+.hint{min-height:5vh;margin-top:1.6vh;font-size:2.8vh;font-weight:700;color:#7a4b00;opacity:0;transition:opacity .3s}
+.hint.on{opacity:1}
+#nextBtn{display:none;margin-top:1vh}
+.ant{position:fixed;right:3vw;bottom:8vh;width:15vh;z-index:9;animation:bob 2.6s ease-in-out infinite;filter:drop-shadow(0 6px 6px rgba(0,0,0,.2))}
+#intro .title{font-size:11vh;color:#2f8a3a;text-shadow:0 5px 0 #fff,0 10px 20px rgba(0,0,0,.18)}
+#intro .sub{font-size:3.4vh;font-weight:900;color:#1f4d2a;margin:1vh 0 3vh;text-align:center;max-width:900px;background:rgba(255,255,255,.75);border-radius:20px;padding:10px 20px}
+#intro,#end{z-index:10}
+#end .cert h1{color:#2f8a3a}
+.verse{font-size:3vh;line-height:1.8;background:#effbe7;border-radius:18px;padding:10px 18px;margin:10px 0;font-weight:700}
+</style>
+</head>
+<body>
+<div class="sun"></div>
+<div class="cloud" style="top:6vh;animation-delay:-8s">☁️</div>
+<div class="cloud" style="top:16vh;animation-delay:-24s;font-size:7vh">☁️</div>
+<svg class="school" viewBox="0 0 200 150"><rect x="20" y="50" width="160" height="100" rx="6" fill="#f6d7a7" stroke="#b07a3c" stroke-width="4"/><polygon points="10,55 100,8 190,55" fill="#e07a5f" stroke="#a24a36" stroke-width="4"/><rect x="85" y="95" width="30" height="55" fill="#8a5a35"/><rect x="35" y="70" width="30" height="25" fill="#9ad3f5" stroke="#b07a3c" stroke-width="3"/><rect x="135" y="70" width="30" height="25" fill="#9ad3f5" stroke="#b07a3c" stroke-width="3"/><text x="100" y="45" text-anchor="middle" font-family="Lalezar" font-size="18" fill="#fff">مدرستنا</text></svg>
+
+<div class="beds" id="beds"></div>
+<img class="ant" src="../img/ant_point.png" alt="">
+
+<section class="screen on" id="intro">
+  <h1 class="title">🌷 حديقة الصف التعاونية</h1>
+  <p class="sub">أمامنا أربعة أحواض فارغة… كل إجابة صحيحة عن <b>فوائد التعاون</b> تسقي حوضًا فتنبت زهرة! هيا نتعاون لنزرع حديقتنا 🌱</p>
+  <button class="btn3d green" id="startBtn">🌱 نبدأ الزراعة</button>
+</section>
+
+<section class="screen" id="play">
+  <div class="qcard" id="qcard">
+    <div class="qnum"><span id="qn">السؤال 1 من 4</span><span class="flw" id="flw"></span></div>
+    <div class="qtext" id="qt"></div>
+    <div class="opts" id="opts"></div>
+    <div class="hint" id="hint"></div>
+    <button class="btn3d gold" id="nextBtn">السؤال التالي ⬅</button>
+  </div>
+</section>
+
+<section class="screen" id="end">
+  <div class="cert">
+    <h1>🌸 ازدهرت حديقتنا! 🌸</h1>
+    <p id="endTxt"></p>
+    <div class="verse">بالتعاون: تنتشر المحبة بين الناس 💞 وننجز العمل في وقت قصير ⏱️ وننال عون الله تعالى 🤲<br>«واللهُ في عونِ العبدِ ما كانَ العبدُ في عونِ أخيه»</div>
+    <button class="btn3d blue" onclick="location.reload()" style="margin-top:8px">↺ نلعب مرة أخرى</button>
+  </div>
+</section>
+
+<script src="../common.js"></script>
+<script>
+T.topbar();
+var Q=[
+ {k:'tf',q:'التعاون ينشر المحبة والمودّة بين الناس.',a:1,hint:'🤔 فكّروا: عندما نساعد بعضنا، هل يزداد حبّنا لبعض؟',why:'صحيح! التعاون ينشر المحبة بين الناس 💞'},
+ {k:'tf',q:'بالتعاون ننجز العمل في وقت أطول وبتعب أكثر.',a:0,hint:'🤔 تذكّروا تحدي النمل: هل كان العمل معًا أسرع أم أبطأ؟',why:'صحيح! العبارة خاطئة؛ فبالتعاون ننجز العمل في وقت أقصر وبتعب أقل ⏱️'},
+ {k:'mcq',q:'من يساعد أخاه ينال:',o:['غضب الناس','التعب وحده','عون الله تعالى'],a:2,hint:'🤔 تذكّروا الحديث الشريف: الله في عون العبد ما كان…',why:'أحسنتم! من يساعد أخاه ينال عون الله تعالى 🤲'},
+ {k:'mcq',q:'أكمل الحديث: «واللهُ في عونِ العبدِ ما كان العبدُ في عونِ …»',o:['أخيه','بيته','صفّه'],a:0,hint:'🤔 الحديث يتحدث عن مساعدة من؟',why:'رائع! «واللهُ في عونِ العبدِ ما كان العبدُ في عونِ أخيه» 🌟'}
+];
+var COLS=[['#ff6b9a','#ffd1e0'],['#ffb703','#fff0b3'],['#9b5de5','#e6d6ff'],['#2b8cee','#cfe6ff']];
+var TAGS=['المحبة','الوقت','عون الله','الحديث'];
+var k=0,score=0,tries=0,busy=false;
+function flower(c){
+  return '<svg viewBox="0 0 100 200"><path d="M50 200 C48 150 54 110 50 60" stroke="#2e8b3a" stroke-width="7" fill="none" stroke-linecap="round"/>'+
+  '<path d="M50 150 C30 140 18 120 20 108 C36 112 48 128 50 150Z" fill="#43a047"/><path d="M50 120 C70 110 84 92 82 80 C66 84 54 100 50 120Z" fill="#4caf50"/>'+
+  '<g class="bud" style="transform-box:fill-box">'+[0,60,120,180,240,300].map(function(a){return '<ellipse cx="50" cy="38" rx="13" ry="24" fill="'+c[0]+'" transform="rotate('+a+' 50 60)"/>';}).join('')+
+  '<circle cx="50" cy="60" r="14" fill="#ffd23f" stroke="#f4a100" stroke-width="3"/><circle cx="45" cy="57" r="2.5" fill="#7a4b00"/><circle cx="55" cy="57" r="2.5" fill="#7a4b00"/><path d="M44 64 Q50 69 56 64" stroke="#7a4b00" stroke-width="2.5" fill="none" stroke-linecap="round"/></g></svg>';
+}
+function beds(){ var b=T.$('#beds'); b.innerHTML='';
+  Q.forEach(function(q,i){ var d=document.createElement('div'); d.className='bed'; d.id='bed'+i;
+    d.innerHTML='<div class="plant">'+flower(COLS[i])+'</div><div class="soil"></div><div class="can">🚿</div><div class="tag">'+TAGS[i]+'</div>'; b.appendChild(d); }); }
+function flw(){ var s=''; for(var i=0;i<Q.length;i++) s+= i<k?'🌸':'🌱'; T.$('#flw').textContent=s; }
+function start(){ k=0; score=0; beds(); T.show('play'); load(); }
+function load(){
+  busy=false; tries=0; var q=Q[k], o=T.$('#opts'); o.innerHTML='';
+  T.$('#qn').textContent='السؤال '+(k+1)+' من '+Q.length; flw();
+  T.$('#qt').textContent=q.q; T.$('#hint').classList.remove('on'); T.$('#nextBtn').style.display='none';
+  var list = q.k==='tf' ? [['✔ صح',1,'t'],['✖ خطأ',0,'f']] : q.o.map(function(t,i){return [t,i,''];});
+  list.forEach(function(it){ var b=document.createElement('button'); b.className='opt '+it[2]; b.textContent=it[0]; b.onclick=function(){ pick(b,it[1]); }; o.appendChild(b); });
+  T.restart(T.$('#qcard'),'pop'); T.play('whoosh');
+}
+function pick(b,v){
+  if(busy) return; var q=Q[k];
+  if(v===q.a){
+    busy=true; if(tries===0) score++; b.classList.add('ok'); T.play('correct');
+    T.$('#hint').textContent=q.why; T.$('#hint').classList.add('on');
+    grow(k); k++; flw();
+    setTimeout(function(){ T.$('#nextBtn').style.display='inline-block'; T.$('#nextBtn').textContent=k<Q.length?'السؤال التالي ⬅':'🌸 شاهدوا الحديقة'; },1600);
+  }else{
+    tries++; b.classList.add('no'); T.play('wrong');
+    T.$('#hint').textContent=q.hint; T.$('#hint').classList.add('on');
+  }
+}
+function grow(i){
+  var bed=T.$('#bed'+i), can=bed.querySelector('.can'); T.restart(can,'go');
+  for(var n=0;n<9;n++) (function(n){ setTimeout(function(){ var d=document.createElement('div'); d.className='drop'; d.style.left=(30+Math.random()*40)+'%'; d.style.bottom='18vh'; bed.appendChild(d); setTimeout(function(){d.remove();},900); },350+n*90); })(n);
+  setTimeout(function(){ bed.classList.add('grown'); T.play('grow'); T.confetti(40); },900);
+  setTimeout(function(){ var f=document.createElement('div'); f.className='bfly'; f.textContent=['🦋','🐝','🦋','🐞'][i]; var r=bed.getBoundingClientRect(); f.style.left=(r.left+r.width*.3)+'px'; f.style.top=(r.top+r.height*.1)+'px'; document.body.appendChild(f); },2300);
+}
+function next(){ if(k<Q.length) load(); else end(); }
+function end(){ T.show('end'); T.play('fanfare'); T.confetti(240); T.$('#endTxt').textContent='زرعنا '+Q.length+' أزهار، وأجبنا '+score+' إجابات صحيحة من المحاولة الأولى 🌷'; }
+T.$('#startBtn').onclick=start; T.$('#nextBtn').onclick=next;
+document.addEventListener('keydown',function(e){ if(e.key==='Enter'&&T.$('#nextBtn').style.display!=='none') next(); });
+beds();
+window.__game={Q:Q,pick:function(i){ var bs=document.querySelectorAll('#opts .opt'); var q=Q[k]; var idx=q.k==='tf'?(i?0:1):i; bs[idx].click(); },next:next,start:start};
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>رادار التعاون – التعاون</title>
+<link rel="stylesheet" href="../common.css">
+<style>
+body{background:radial-gradient(circle at 50% 40%,#1b3a6b,#0b1730 70%);overflow:hidden;color:#eaf6ff}
+.stars-bg{position:fixed;inset:0;background-image:radial-gradient(2px 2px at 10% 20%,#fff8,transparent),radial-gradient(2px 2px at 70% 15%,#fff8,transparent),radial-gradient(1.5px 1.5px at 40% 80%,#fff6,transparent),radial-gradient(2px 2px at 85% 65%,#fff7,transparent),radial-gradient(1.5px 1.5px at 25% 55%,#fff5,transparent);pointer-events:none}
+/* الرادار */
+.radar{position:relative;width:min(56vh,40vw);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#0f4d3a 0%,#08261f 70%);border:6px solid #39e6a2;box-shadow:0 0 40px #39e6a266,inset 0 0 50px #000a;overflow:hidden;flex:none}
+.radar .ring{position:absolute;border:2px solid #39e6a255;border-radius:50%;inset:var(--i)}
+.radar .ax{position:absolute;background:#39e6a244}
+.sweep{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,#39e6a2aa,#39e6a200 70deg,transparent 360deg);animation:spin 3.2s linear infinite}
+.radar.alarm{border-color:#ff5d6c;box-shadow:0 0 50px #ff5d6c88}
+.radar.alarm .sweep{background:conic-gradient(from 0deg,#ff5d6caa,#ff5d6c00 70deg,transparent 360deg)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.blip{position:absolute;width:7%;height:7%;border-radius:50%;background:#bfffe4;transform:translate(-50%,-50%);box-shadow:0 0 12px #39e6a2;opacity:.35}
+.blip.cur{opacity:1;animation:ping 1s ease-out infinite}
+.blip.done{opacity:1;background:#ffd23f;box-shadow:0 0 18px #ffd23f;animation:none}
+@keyframes ping{0%{box-shadow:0 0 0 0 #39e6a2cc}100%{box-shadow:0 0 0 22px #39e6a200}}
+.center-ic{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:7vh;filter:drop-shadow(0 0 8px #39e6a2)}
+/* اللوحة */
+#play{flex-direction:row;gap:4vw;padding:0 4vw}
+.panel{background:rgba(255,255,255,.97);color:#22313f;border-radius:28px;padding:2.4vh 2.4vw;width:min(760px,50vw);box-shadow:0 0 0 5px #39e6a2,0 20px 50px #0008;text-align:center}
+.panel .top{display:flex;justify-content:space-between;align-items:center;font-family:'Lalezar';font-size:2.8vh;color:#1a5fa8}
+.bulbs{font-size:3.6vh;letter-spacing:6px}
+.bulbs .on{filter:drop-shadow(0 0 10px #ffd23f)}
+.bulbs .off{filter:grayscale(1) brightness(1.6);opacity:.45}
+.pic{width:100%;height:27vh;border-radius:18px;overflow:hidden;margin:1.2vh 0;background:#eef6fd}
+.pic img{width:100%;height:100%;object-fit:cover}
+.qtext{font-size:3.3vh;font-weight:900;line-height:1.5;margin-bottom:1.6vh}
+.opts{display:flex;flex-direction:column;gap:1.2vh}
+.opts.tf{flex-direction:row;justify-content:center;gap:2vw}
+.opt{font-family:'Tajawal';font-weight:900;font-size:2.7vh;padding:1.2vh 1.4vw;border-radius:18px;background:#f3f8ff;color:#22313f;box-shadow:0 5px 0 #b8cde4;text-align:center;transition:transform .15s}
+.opt:hover{transform:translateY(-3px)}
+.opts.tf .opt{font-family:'Lalezar';font-weight:400;font-size:3.4vh;min-width:13vw;color:#fff}
+.opt.t{background:#2fbf71;box-shadow:0 6px 0 #1d8a4f}.opt.f{background:#f0545c;box-shadow:0 6px 0 #b9343b}
+.opt.ok{outline:6px solid #ffd23f}
+.opt.no{opacity:.45;animation:shake .5s}
+.why{min-height:4.6vh;margin-top:1.4vh;font-size:2.5vh;font-weight:700;color:#1a5fa8;opacity:0;transition:opacity .3s}
+.why.on{opacity:1}
+.why.bad{color:#b9343b}
+#nextBtn{display:none;margin-top:1vh}
+#intro .title{font-size:11vh;color:#39e6a2;text-shadow:0 0 22px #39e6a2aa}
+#intro .sub{font-size:3.3vh;font-weight:900;margin:2vh 0 3vh;text-align:center;max-width:900px;line-height:1.6}
+#intro .radar{width:min(34vh,30vw);margin-bottom:2vh}
+#end .cert h1{color:#1a5fa8}
+#end .cert p{color:#22313f}
+.verse{font-size:3vh;line-height:1.8;background:#eef6fd;border-radius:18px;padding:10px 18px;margin:10px 0;font-weight:700;color:#22313f}
+</style>
+</head>
+<body>
+<div class="stars-bg"></div>
+
+<section class="screen on" id="intro">
+  <div class="radar"><div class="ring" style="--i:16%"></div><div class="ring" style="--i:32%"></div><div class="sweep"></div><div class="center-ic">📡</div></div>
+  <h1 class="title">رادار التعاون</h1>
+  <p class="sub">الرادار يلتقط أربعة مواقف من حياتنا 🛰️ احكموا على كل موقف: هل هو <b style="color:#39e6a2">سلوك تعاوني</b>؟ كل حكم صحيح يُضيء مصباحًا 💡</p>
+  <button class="btn3d green" id="startBtn">📡 شغّلوا الرادار</button>
+</section>
+
+<section class="screen" id="play">
+  <div class="radar" id="radar">
+    <div class="ring" style="--i:12%"></div><div class="ring" style="--i:25%"></div><div class="ring" style="--i:38%"></div>
+    <div class="ax" style="left:50%;top:0;bottom:0;width:2px"></div><div class="ax" style="top:50%;left:0;right:0;height:2px"></div>
+    <div class="sweep"></div>
+    <div class="blip" style="left:30%;top:28%"></div><div class="blip" style="left:72%;top:34%"></div><div class="blip" style="left:66%;top:74%"></div><div class="blip" style="left:26%;top:68%"></div>
+  </div>
+  <div class="panel" id="panel">
+    <div class="top"><span id="qn">الموقف 1 من 4</span><span class="bulbs" id="bulbs"></span></div>
+    <div class="pic"><img id="pic" src="" alt=""></div>
+    <div class="qtext" id="qt"></div>
+    <div class="opts" id="opts"></div>
+    <div class="why" id="why"></div>
+    <button class="btn3d blue" id="nextBtn">الموقف التالي ⬅</button>
+  </div>
+</section>
+
+<section class="screen" id="end">
+  <div class="cert">
+    <h1>📡 التقط الرادار كل المواقف! 💡</h1>
+    <p id="endTxt"></p>
+    <div class="verse">قال الله تعالى: ﴿وَتَعَاوَنُوا عَلَى الْبِرِّ وَالتَّقْوَىٰ ۖ وَلَا تَعَاوَنُوا عَلَى الْإِثْمِ وَالْعُدْوَانِ﴾</div>
+    <button class="btn3d green" onclick="location.reload()" style="margin-top:8px">↺ نلعب مرة أخرى</button>
+  </div>
+</section>
+
+<script src="../common.js"></script>
+<script>
+T.topbar();
+var Q=[
+ {k:'tf',img:'a1',q:'مساعدة الأخ في ترتيب ألعابه سلوك تعاوني.',a:1,why:'صحيح! لأنه يعمل مع أخيه في عمل خير 🤝'},
+ {k:'tf',img:'a2',q:'أكل الحلوى وحدي ورفض مشاركة إخوتي سلوك تعاوني.',a:0,why:'صحيح! هذا ليس تعاونًا؛ لأنه لم يشارك إخوته، ففيه أنانية.'},
+ {k:'mcq',img:'a4',q:'أيّ هذه السلوكيات تعاوني؟',o:['حمل حقيبته فقط وترك سلّة المجموعة لغيره','قسّمت المجموعة الأدوات وأتقن كل واحد دوره','رفض أن يشارك أدواته مع زملائه'],a:1,why:'أحسنتم! عملوا معًا وأدّى كل واحد دوره بإتقان 🌟'},
+ {k:'mcq',img:'a5',q:'ساعد صديقه على إخفاء لعبة أخذها من زميله دون إذن. هذا السلوك:',o:['تعاون محمود لأنه ساعد صديقه','تعاون على الإثم نهانا الله عنه','سلوك ليس فيه خطأ'],a:1,why:'رائع! هذا تعاون على الإثم، والله يقول: ﴿وَلَا تَعَاوَنُوا عَلَى الْإِثْمِ وَالْعُدْوَانِ﴾'}
+];
+var HINT=['🚨 انتبهوا! هل يعمل الولد مع أخيه في شيء نافع؟','🚨 انتبهوا! هل شارك إخوته أم أكل وحده؟','🚨 انتبهوا! في التعاون نعمل معًا ويؤدي كل واحد دوره.','🚨 انتبهوا! هل التعاون يكون على الخير أم على الخطأ؟'];
+var k=0,score=0,tries=0,busy=false;
+function bulbs(){ var h=''; for(var i=0;i<Q.length;i++) h+='<span class="'+(i<k?'on':'off')+'">💡</span>'; T.$('#bulbs').innerHTML=h; }
+function blips(){ document.querySelectorAll('#radar .blip').forEach(function(b,i){ b.className='blip'+(i<k?' done':i===k?' cur':''); }); }
+function start(){ k=0; score=0; T.show('play'); load(); }
+function load(){
+  busy=false; tries=0; var q=Q[k], o=T.$('#opts'); o.innerHTML=''; o.className='opts'+(q.k==='tf'?' tf':'');
+  T.$('#qn').textContent='الموقف '+(k+1)+' من '+Q.length; bulbs(); blips();
+  T.$('#pic').src='../img/'+q.img+'.jpg'; T.$('#qt').textContent=q.q;
+  T.$('#why').className='why'; T.$('#nextBtn').style.display='none'; T.$('#radar').classList.remove('alarm');
+  var list = q.k==='tf' ? [['✅ تعاوني',1,'t'],['❌ غير تعاوني',0,'f']] : q.o.map(function(t,i){return [t,i,''];});
+  list.forEach(function(it){ var b=document.createElement('button'); b.className='opt '+it[2]; b.textContent=it[0]; b.onclick=function(){ pick(b,it[1]); }; o.appendChild(b); });
+  T.restart(T.$('#panel'),'pop'); T.play('tick'); setTimeout(function(){T.play('tick');},150);
+}
+function pick(b,v){
+  if(busy) return; var q=Q[k], w=T.$('#why');
+  if(v===q.a){
+    busy=true; if(tries===0) score++; b.classList.add('ok'); T.play('correct'); T.confetti(50);
+    w.textContent=q.why; w.className='why on'; T.$('#radar').classList.remove('alarm');
+    k++; bulbs(); blips(); T.play('coin');
+    T.$('#nextBtn').style.display='inline-block'; T.$('#nextBtn').textContent=k<Q.length?'الموقف التالي ⬅':'💡 النتيجة';
+  }else{
+    tries++; b.classList.add('no'); T.play('wrong'); w.textContent=HINT[k]; w.className='why on bad';
+    var r=T.$('#radar'); r.classList.add('alarm'); setTimeout(function(){ r.classList.remove('alarm'); },1400);
+  }
+}
+function next(){ if(k<Q.length) load(); else end(); }
+function end(){ T.show('end'); T.play('fanfare'); T.confetti(240); T.$('#endTxt').textContent='أضأتم '+Q.length+' مصابيح، و'+score+' أحكام صحيحة من المحاولة الأولى 💡'; }
+T.$('#startBtn').onclick=start; T.$('#nextBtn').onclick=next;
+document.addEventListener('keydown',function(e){ if(e.key==='Enter'&&T.$('#nextBtn').style.display!=='none') next(); });
+window.__game={Q:Q,pick:function(i){ var bs=document.querySelectorAll('#opts .opt'); var q=Q[k]; bs[q.k==='tf'?(i?0:1):i].click(); },next:next,start:start};
+</script>
+</body>
+</html>
